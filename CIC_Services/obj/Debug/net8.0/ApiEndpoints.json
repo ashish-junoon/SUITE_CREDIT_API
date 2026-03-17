@@ -1,0 +1,262 @@
+[
+  {
+    "ContainingType": "CIC_Services.Controllers.CreditScoreController",
+    "Method": "AuthQuestionnaireCriff",
+    "RelativePath": "api/CreditScore/auth-questionnaire-crif",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "request",
+        "Type": "CIC.Model.Criff.Request.AuthRQ",
+        "IsRequired": true
+      },
+      {
+        "Name": "token",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "companyid",
+        "Type": "System.String",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "CIC_Services.Controllers.CreditScoreController",
+    "Method": "AuthQuestionnaireCrifPdf",
+    "RelativePath": "api/CreditScore/auth-questionnaire-crif-pdf",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "request",
+        "Type": "CIC.Model.Criff.Request.AuthRQ",
+        "IsRequired": true
+      },
+      {
+        "Name": "token",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "companyid",
+        "Type": "System.String",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "CIC_Services.Controllers.CreditScoreController",
+    "Method": "CriffPrefil",
+    "RelativePath": "api/CreditScore/cr-prefil",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "request",
+        "Type": "CIC.Model.Criff.Request.CrifPrefillRQ",
+        "IsRequired": true
+      },
+      {
+        "Name": "token",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "companyid",
+        "Type": "System.String",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "CIC_Services.Controllers.CreditScoreController",
+    "Method": "Fulfill",
+    "RelativePath": "api/CreditScore/credit-report-cibil",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "body",
+        "Type": "CIC.Model.TransUnionCibil.FulfillOfferRQ",
+        "IsRequired": true
+      },
+      {
+        "Name": "token",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "companyid",
+        "Type": "System.String",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "CIC_Services.Controllers.CreditScoreController",
+    "Method": "GetCreditReportCriff",
+    "RelativePath": "api/CreditScore/credit-report-crif",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "request",
+        "Type": "CIC.Model.Criff.Request.SoftPullRQ",
+        "IsRequired": true
+      },
+      {
+        "Name": "token",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "companyid",
+        "Type": "System.String",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "CIC_Services.Controllers.CreditScoreController",
+    "Method": "GetCreditReportCriffPdf",
+    "RelativePath": "api/CreditScore/credit-report-crif-pdf",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "request",
+        "Type": "CIC.Model.Criff.Request.SoftPullRQ",
+        "IsRequired": true
+      },
+      {
+        "Name": "token",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "companyid",
+        "Type": "System.String",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "CIC_Services.Controllers.CreditScoreController",
+    "Method": "GetCreditReportCriffPdfV1",
+    "RelativePath": "api/CreditScore/credit-report-crif-pdf-v1",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "request",
+        "Type": "CIC.Model.Criff.Request.SoftPullRQV1",
+        "IsRequired": true
+      },
+      {
+        "Name": "token",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "companyid",
+        "Type": "System.String",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "CIC_Services.Controllers.CreditScoreController",
+    "Method": "GetCreditReportCriffV1",
+    "RelativePath": "api/CreditScore/credit-report-crif-v1",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "request",
+        "Type": "CIC.Model.Criff.Request.SoftPullRQV1",
+        "IsRequired": true
+      },
+      {
+        "Name": "token",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "companyid",
+        "Type": "System.String",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "CIC_Services.Controllers.CreditScoreController",
+    "Method": "GetCreditReport",
+    "RelativePath": "api/CreditScore/credit-report-experian",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "request",
+        "Type": "CIC.Model.Experian.Request.ExperianRequest",
+        "IsRequired": true
+      },
+      {
+        "Name": "token",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "companyid",
+        "Type": "System.String",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "CIC_Services.Controllers.CreditScoreController",
+    "Method": "GetCreditReport_pdf",
+    "RelativePath": "api/CreditScore/credit-report-experian-pdf",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "request",
+        "Type": "CIC.Model.Experian.Request.ExperianRequest",
+        "IsRequired": true
+      },
+      {
+        "Name": "token",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "companyid",
+        "Type": "System.String",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  }
+]

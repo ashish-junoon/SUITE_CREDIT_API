@@ -1,0 +1,23 @@
+{
+  "runtimeTarget": {
+    "name": ".NETCoreApp,Version=v8.0",
+    "signature": ""
+  },
+  "compilationOptions": {},
+  "targets": {
+    ".NETCoreApp,Version=v8.0": {
+      "JC.CIC.Model/1.0.0": {
+        "runtime": {
+          "JC.CIC.Model.dll": {}
+        }
+      }
+    }
+  },
+  "libraries": {
+    "JC.CIC.Model/1.0.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    }
+  }
+}

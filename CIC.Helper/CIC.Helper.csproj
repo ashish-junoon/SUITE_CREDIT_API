@@ -1,0 +1,27 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="UrlService.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="itext7.bouncy-castle-adapter" Version="9.4.0" />
+    <PackageReference Include="itext7.pdfhtml" Version="6.3.0" />
+    <PackageReference Include="Microsoft.AspNetCore.Http.Abstractions" Version="2.3.9" />
+    <PackageReference Include="Microsoft.Extensions.Hosting.Abstractions" Version="10.0.2" />
+    <PackageReference Include="Microsoft.Playwright" Version="1.58.0" />
+    <PackageReference Include="Microsoft.TeamFoundationServer.ExtendedClient" Version="19.225.2" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\CIC.Model\CIC.Model.csproj" />
+    <ProjectReference Include="..\LoggerLibrary\LoggerLibrary.csproj" />
+  </ItemGroup>
+
+</Project>

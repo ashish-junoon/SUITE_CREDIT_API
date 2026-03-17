@@ -1,0 +1,6 @@
+@CIC_Services_HostAddress = http://localhost:5263
+
+GET {{CIC_Services_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###

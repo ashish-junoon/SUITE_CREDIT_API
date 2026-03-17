@@ -1,0 +1,34 @@
+{
+  "Partners": [
+    {
+      "Vendor": "JLK",
+      "Token": "SkxLVEVDSE5PTE9HSUVTUFJJVkFURUxJTUlURURVNzQ5OTlETDIwMThQVEMzNDMwMjEyMzA2MjAyNQ==",
+      "IpAddress": "192.168.0.116",
+      "Company": "JLK TECHNOLOGIES PRIVATE LIMITED"
+    },
+    {
+      "Vendor": "HUM",
+      "Token": "SFVNTUFJTigpKiZeJUpVTk9PTkNBUElUQUw2NTk4U0VSVklDRVM=",
+      "IpAddress": "192.168.0.116",
+      "Company": "HUM HAIN SERVICES PVT LTD"
+    },
+    {
+      "Vendor": "JCP",
+      "Token": "SlVOT09OQ0FQSVRBTFNFUlZJQ0VTMjUtQXVnLTIwMjU=",
+      "IpAddress": "192.168.0.116",
+      "Company": "Junoon Capital Services Pvt. Ltd."
+    },
+    {
+      "Vendor": "anonyms",
+      "Token": "anonyms",
+      "IpAddress": "192.168.0.116",
+      "Company": "anonyms"
+    },
+    {
+      "Vendor": "TXT",
+      "Token": "QQBCAEMALQAxADAALQBOAG8AdgAtADIAMAAyADUA",
+      "IpAddress": "10.0.0.47",
+      "Company": "ABCD"
+    }
+  ]
+}
