@@ -39,10 +39,10 @@ namespace JC.TransUnion.Cibil
 
         public async Task<object> CallCibil(string endpoint, object payload)
         {
-            _logger.LogInfo($"Initiating CallCibil for endpoint: {endpoint} with payload: {JsonSerializer.Serialize(payload)} PUBLIC_CERT_PATH: {RootPath + config.PUBLIC_CERT_PATH}");
+           // _logger.LogInfo($"Initiating CallCibil for endpoint: {endpoint} with payload: {JsonSerializer.Serialize(payload)} PUBLIC_CERT_PATH: {RootPath + config.PUBLIC_CERT_PATH}");
             var encryptedPayload = Crypto.HybridEncryptor.Encrypt_V1(payload, RootPath + config.PUBLIC_CERT_PATH);
-            _logger.LogInfo($"Encrypted Payload: {JsonSerializer.Serialize(encryptedPayload)}"); // Debug log
-            _logger.LogInfo($"HYBRID_BASE_URL: {config.HYBRID_BASE_URL + endpoint}"); // Debug log
+           // _logger.LogInfo($"Encrypted Payload: {JsonSerializer.Serialize(encryptedPayload)}"); // Debug log
+           // _logger.LogInfo($"HYBRID_BASE_URL: {config.HYBRID_BASE_URL + endpoint}"); // Debug log
             var request = new HttpRequestMessage(
                 HttpMethod.Post,
                 config.HYBRID_BASE_URL + endpoint);
@@ -52,7 +52,7 @@ namespace JC.TransUnion.Cibil
                 Encoding.UTF8,
                 "application/json");
 
-            _logger.LogInfo($"member-ref-id: {config.MEMBER_REF_ID} client-secret: {config.CLIENT_SECRET} apikey: {config.API_KEY}"); // Debug log
+            //_logger.LogInfo($"member-ref-id: {config.MEMBER_REF_ID} client-secret: {config.CLIENT_SECRET} apikey: {config.API_KEY}"); // Debug log
 
             request.Headers.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
 

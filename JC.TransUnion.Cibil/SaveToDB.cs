@@ -29,7 +29,7 @@ namespace JC.TransUnion.Cibil
                 string company_id = requiredHeader;
                 string vendor_code = requiredcompanyid;
                 string dob = obj["GetCustomerAssetsResponse"]?["GetCustomerAssetsSuccess"]?["Asset"]?["TrueLinkCreditReport"]?["Borrower"]?["Birth"]?["date"]?.ToString();
-                string email = obj["GetCustomerAssetsResponse"]?["GetCustomerAssetsSuccess"]?["Asset"]?["TrueLinkCreditReport"]?["Borrower"]?["EmailAddress"]?["Email"]?.ToString();
+                string email = obj["GetCustomerAssetsResponse"]?["GetCustomerAssetsSuccess"]?["Asset"]?["TrueLinkCreditReport"]?["Borrower"]?["EmailAddress"]?["Email"].FirstOrDefault()?.ToString();
                 var address = obj.SelectToken("GetCustomerAssetsResponse.GetCustomerAssetsSuccess.Asset.TrueLinkCreditReport.Borrower.BorrowerAddress.CreditAddress");
                 string street = address?["StreetAddress"]?.ToString();
                 string city = address?["City"]?.ToString();

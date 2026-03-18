@@ -1,4 +1,5 @@
 ﻿using CIC.Model.TransUnionCibil;
+using JC.TransUnion.Cibil.Models;
 
 namespace CIC_Services.Interfaces
 {

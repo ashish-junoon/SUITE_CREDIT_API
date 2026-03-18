@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Options;
 using Newtonsoft.Json.Linq;
+using System;
 using System.Net;
 using System.Text.Json;
 using static JC.TransUnion.Cibil.Models.Requests;
@@ -67,19 +68,37 @@ namespace JC.TransUnion.Cibil.Services
                 };
             }
 
-            var fullfilPayload = RequestGenerator.ReturnFulfillOfferRequest(configModel, payload, Unique);
-            result = await httpTransUnionCall.CallCibil("/fulfilloffer", fullfilPayload);
-            _logger.LogInfo($"fulfilloffer_{guid}-{JsonSerializer.Serialize(result, new JsonSerializerOptions
-            {
-                WriteIndented = true
-            })}");
 
-            FulFillResposeRoot fulfillOfferRSRoot = JsonSerializer.Deserialize<FulFillResposeRoot>(JsonSerializer.Serialize(result));
+            //var fullfilPayload = RequestGenerator.ReturnFulfillOfferRequest(configModel, payload, Unique);
+            //result = await httpTransUnionCall.CallCibil("/fulfilloffer", fullfilPayload);
+            //_logger.LogInfo($"fulfilloffer_{guid}-{JsonSerializer.Serialize(result, new JsonSerializerOptions
+            //{
+            //    WriteIndented = true
+            //})}");
 
-            _logger.LogInfo($"fulfilloffer_fulfillOfferRSRoot_{guid}-{JsonSerializer.Serialize(fulfillOfferRSRoot, new JsonSerializerOptions
+            //FulFillResposeRoot fulfillOfferRSRoot = JsonSerializer.Deserialize<FulFillResposeRoot>(JsonSerializer.Serialize(result));
+
+            //_logger.LogInfo($"fulfilloffer_fulfillOfferRSRoot_{guid}-{JsonSerializer.Serialize(fulfillOfferRSRoot, new JsonSerializerOptions
+            //{
+            //    WriteIndented = true
+            //})}");
+
+            FulFillResposeRoot fulfillOfferRSRoot = await FulFillOffer(configModel, payload, Unique, guid);
+            if (fulfillOfferRSRoot?.FulfillOfferResponse?.ResponseStatus == "Failure")
             {
-                WriteIndented = true
-            })}");
+                Unique = fulfillOfferRSRoot?.FulfillOfferResponse?.FulfillOfferError?.Failure?.ClientUserKey;
+                //_logger.LogInfo($" clientUserKey : {Unique} fulfilloffer_fulfillOfferRSRoot_Failure_{guid}-{JsonSerializer.Serialize(fulfillOfferRSRoot, new JsonSerializerOptions
+                //{
+                //    WriteIndented = true
+                //})}");
+                fulfillOfferRSRoot = new FulFillResposeRoot();
+                fulfillOfferRSRoot = await FulFillOffer(configModel, payload, Unique, guid);
+            }
+
+            //_logger.LogInfo($"fulfilloffer_fulfillOfferRSRoot_Final_{guid}-{JsonSerializer.Serialize(fulfillOfferRSRoot, new JsonSerializerOptions
+            //{
+            //    WriteIndented = true
+            //})}");
 
             if (fulfillOfferRSRoot?.FulfillOfferResponse?.ResponseStatus != "Success")
             {
@@ -100,10 +119,10 @@ namespace JC.TransUnion.Cibil.Services
             AuthRequestRoot authRequest = RequestGenerator.ReturnAuthRequest(configModel, Unique);
 
             result = await httpTransUnionCall.CallCibil("/GetAuthenticationQuestions", authRequest);
-            _logger.LogInfo($"GetAuthenticationQuestions_{guid}-{JsonSerializer.Serialize(result, new JsonSerializerOptions
-            {
-                WriteIndented = true
-            })}");
+            //_logger.LogInfo($"GetAuthenticationQuestions_{guid}-{JsonSerializer.Serialize(result, new JsonSerializerOptions
+            //{
+            //    WriteIndented = true
+            //})}");
 
             AuthResponseRoot authResponseRoot = JsonSerializer.Deserialize<AuthResponseRoot>(JsonSerializer.Serialize(result));
 
@@ -125,10 +144,10 @@ namespace JC.TransUnion.Cibil.Services
             GetCustomerAssetsRequestRoot assetsRequestRoot = RequestGenerator.ReturnGetCustomerAssetsRequest(configModel, Unique);
 
             result = await httpTransUnionCall.CallCibil("/GetCustomerAssets", assetsRequestRoot);
-            _logger.LogInfo($"GetCustomerAssets_{guid}-{JsonSerializer.Serialize(result, new JsonSerializerOptions
-            {
-                WriteIndented = true
-            })}");
+            //_logger.LogInfo($"GetCustomerAssets_{guid}-{JsonSerializer.Serialize(result, new JsonSerializerOptions
+            //{
+            //    WriteIndented = true
+            //})}");
 
             _logger.LogInfo("PushToDatabase - Data prepared and sent for saving into database.");
             Task.Run(() => SaveToDB.PushToDatabase(result, guid , requiredHeader , requiredcompanyid , _appsetting?.Value?.ConnectionStrings?.dbconnection ?? "", _logger));
@@ -153,7 +172,7 @@ namespace JC.TransUnion.Cibil.Services
                 transaction_id = guid
             };
 
-            _logger.LogInfo($"GetProductWebToken_{guid}-{JsonSerializer.Serialize(apiResponse, new JsonSerializerOptions
+            _logger.LogInfo($"FinalResponse_{guid}-{JsonSerializer.Serialize(apiResponse, new JsonSerializerOptions
             {
                 WriteIndented = true
             })}");
@@ -169,6 +188,25 @@ namespace JC.TransUnion.Cibil.Services
             return await CallHybrid(req , requiredHeader , requiredcompanyid);
         }
 
+
+        private async Task<FulFillResposeRoot> FulFillOffer(ConfigModel configModel, FulfillOfferRQ payload, string Unique, string guid)
+        {
+            var fullfilPayload = RequestGenerator.ReturnFulfillOfferRequest(configModel, payload, Unique);
+           var result = await httpTransUnionCall.CallCibil("/fulfilloffer", fullfilPayload);
+            _logger.LogInfo($"fulfilloffer_{guid}-{JsonSerializer.Serialize(result, new JsonSerializerOptions
+            {
+                WriteIndented = true
+            })}");
+
+            FulFillResposeRoot fulfillOfferRSRoot = JsonSerializer.Deserialize<FulFillResposeRoot>(JsonSerializer.Serialize(result));
+
+            _logger.LogInfo($"fulfilloffer_fulfillOfferRSRoot_{guid}-{JsonSerializer.Serialize(fulfillOfferRSRoot, new JsonSerializerOptions
+            {
+                WriteIndented = true
+            })}");
+
+            return fulfillOfferRSRoot;
+        }
 
     }
 

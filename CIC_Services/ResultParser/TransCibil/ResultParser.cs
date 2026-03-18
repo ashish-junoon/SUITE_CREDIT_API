@@ -1,12 +1,13 @@
 ﻿using CIC.Model.TransUnionCibil;
 using JC.TransUnion.Cibil.Models;
+using LoggerLibrary;
 using Newtonsoft.Json;
 
 namespace CIC_Services.ResultParser.TransCibil
 {
     public static class ResultParser
     {
-        public static TransuniunReturnResponse ParseResponse(CibilApiResponse cibilApi)
+        public static TransuniunReturnResponse ParseResponse(CibilApiResponse cibilApi, ILoggerManager _logger)
         {
             return new TransuniunReturnResponse
             {

@@ -53,32 +53,6 @@
   },
   {
     "ContainingType": "CIC_Services.Controllers.CreditScoreController",
-    "Method": "CriffPrefil",
-    "RelativePath": "api/CreditScore/cr-prefil",
-    "HttpMethod": "POST",
-    "IsController": true,
-    "Order": 0,
-    "Parameters": [
-      {
-        "Name": "request",
-        "Type": "CIC.Model.Criff.Request.CrifPrefillRQ",
-        "IsRequired": true
-      },
-      {
-        "Name": "token",
-        "Type": "System.String",
-        "IsRequired": false
-      },
-      {
-        "Name": "companyid",
-        "Type": "System.String",
-        "IsRequired": false
-      }
-    ],
-    "ReturnTypes": []
-  },
-  {
-    "ContainingType": "CIC_Services.Controllers.CreditScoreController",
     "Method": "Fulfill",
     "RelativePath": "api/CreditScore/credit-report-cibil",
     "HttpMethod": "POST",
@@ -244,6 +218,32 @@
       {
         "Name": "request",
         "Type": "CIC.Model.Experian.Request.ExperianRequest",
+        "IsRequired": true
+      },
+      {
+        "Name": "token",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "companyid",
+        "Type": "System.String",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "CIC_Services.Controllers.CreditScoreController",
+    "Method": "CriffPrefil",
+    "RelativePath": "api/CreditScore/customer-fusion",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "request",
+        "Type": "CIC.Model.Criff.Request.CrifPrefillRQ",
         "IsRequired": true
       },
       {

@@ -7,6 +7,7 @@ using Org.BouncyCastle.Ocsp;
 using System.Net.Http;
 using System.Text;
 using System.Xml;
+using System.Xml.Linq;
 
 namespace JC.Criff.Highmark
 {
@@ -48,7 +49,7 @@ namespace JC.Criff.Highmark
                                 <PRODUCT-VER>2.0</PRODUCT-VER>
                                 <REQ-MBR>{CRIF_MBRID}</REQ-MBR>
                                 <SUB-MBR-ID>{CRIF_CUSTOMER_NAME}</SUB-MBR-ID>
-                                <INQ-DT-TM>{uniq.datetime}</INQ-DT-TM>
+                                <INQ-DT-TM>{DateTime.UtcNow.ToString("yyyy-MM-dd hh:mm:ss")}</INQ-DT-TM>
                                 <REQ-VOL-TYP>C01</REQ-VOL-TYP>
                                 <REQ-ACTN-TYP>AT01</REQ-ACTN-TYP>
                                 <TEST-FLG>HMTEST</TEST-FLG>
@@ -79,35 +80,49 @@ namespace JC.Criff.Highmark
                                     <CLIENT-CUSTOMER-ID></CLIENT-CUSTOMER-ID><BRANCH-ID></BRANCH-ID><APP-ID></APP-ID><AMOUNT></AMOUNT></APPLICATION-SEGMENT>
                         </INQUIRY></REQUEST-REQUEST-FILE>";
 
+                var doc = XDocument.Parse(requestXML);
+                // trim values
+                foreach (var el in doc.Descendants())
+                {
+                    if (!el.HasElements)
+                        el.Value = el.Value.Trim();
+                }
 
+                // remove formatting
+                string finalXml = doc.ToString(SaveOptions.DisableFormatting);
 
 
                 var request = new HttpRequestMessage(HttpMethod.Post, CRIF_ENDPOINT_URL);
-                request.Headers.Add("requestXml", requestXML.Replace("\r", "").Replace("\n", ""));
+                request.Headers.Add("requestXml", finalXml);
                 request.Headers.Add("UserId", CRIF_USER_ID);
                 request.Headers.Add("password", CRIF_PASSWORD);
                 request.Headers.Add("mbrid", CRIF_MBRID);
                 request.Headers.Add("productType", "FUSION");
                 request.Headers.Add("productVersion", "2.0");
                 request.Headers.Add("reqVolType", "C01");
+
+               // _logger.LogInfo($"finalXml : {finalXml}");
+               // _logger.LogInfo($"UserId : {CRIF_USER_ID}");
+               // _logger.LogInfo($"password : {CRIF_PASSWORD}");
+               // _logger.LogInfo($"mbrid : {CRIF_MBRID}");
+               // _logger.LogInfo($"CRIF_ENDPOINT_URL : {CRIF_ENDPOINT_URL}");
+
                 var response = await _http.SendAsync(request);
                 if (!response.IsSuccessStatusCode)
                 {
-                    return await Task.FromResult(new FusionParsedResponse { success = false, StatusCode = (int)response.StatusCode, Message= $"EXCEPTION" });
+                    _logger.LogInfo($"http Response : {response.Content.ReadAsStringAsync().Result}");
+                    return await Task.FromResult(new FusionParsedResponse { success = false, StatusCode = (int)response.StatusCode, Message= $"EXCEPTION : {response.Content.ReadAsStringAsync().Result}" });
                 }
                 var xmlResponse = await response.Content.ReadAsStringAsync();
-
+                //_logger.LogInfo($"1 Response XML : {xmlResponse.Replace("\r", "").Replace("\n", "")}");
                 ReportFile result =  XmlHelper.DeserializeXml<ReportFile>(xmlResponse);
 
-                await Task.Delay(1000);
+                await Task.Delay(2000);
 
-                string requestXML1 = $@"<REQUEST-REQUEST-FILE>
-                                    <HEADER-SEGMENT>
-                                    <PRODUCT-TYP>FUSION</PRODUCT-TYP>
-                                    <PRODUCT-VER>2.0</PRODUCT-VER>
+                string requestXML1 = $@"<REQUEST-REQUEST-FILE><HEADER-SEGMENT><PRODUCT-TYP>FUSION</PRODUCT-TYP><PRODUCT-VER>2.0</PRODUCT-VER>
                                     <REQ-MBR>{CRIF_MBRID}</REQ-MBR>
                                     <SUB-MBR-ID>{CRIF_CUSTOMER_NAME}</SUB-MBR-ID>
-                                    <INQ-DT-TM>{uniq.datetime}</INQ-DT-TM>
+                                    <INQ-DT-TM>{DateTime.UtcNow.ToString("yyyy-MM-dd")}</INQ-DT-TM>
                                     <REQ-VOL-TYP>C01</REQ-VOL-TYP>
                                     <REQ-ACTN-TYP>AT01</REQ-ACTN-TYP>
                                     <TEST-FLG>HMTEST</TEST-FLG>
@@ -118,15 +133,27 @@ namespace JC.Criff.Highmark
                                     <REQ-SERVICE-TYPE>ALL</REQ-SERVICE-TYPE>
                                     </HEADER-SEGMENT>
                                     <INQUIRY>
-                                    <INQUIRY-UNIQUE-REF-NO>{uniq.random}</INQUIRY-UNIQUE-REF-NO>
-                                    <REQUEST-DT-TM>{uniq.datetime}</REQUEST-DT-TM>
-                                    <REPORT-ID>{result?.InquiryStatus.Inquiry.ReportId}</REPORT-ID>
+                                    <INQUIRY-UNIQUE-REF-NO>{result.InquiryStatus.Inquiry.InquiryUniqueRefNo}</INQUIRY-UNIQUE-REF-NO>
+                                    <REQUEST-DT-TM>{DateTime.UtcNow.ToString("dd-MM-yyyy")}</REQUEST-DT-TM>
+                                    <REPORT-ID>{result.InquiryStatus.Inquiry.ReportId}</REPORT-ID>
                                     </INQUIRY>
                                     </REQUEST-REQUEST-FILE>";
 
+                //<REPORT-ID>FUSION260316385269114</REPORT-ID>
+
+                var doc1 = XDocument.Parse(requestXML1);
+                // trim values
+                foreach (var el in doc1.Descendants())
+                {
+                    if (!el.HasElements)
+                        el.Value = el.Value.Trim();
+                }
+
+                // remove formatting
+                string finalXml1 = doc1.ToString(SaveOptions.DisableFormatting);
 
                 var request1 = new HttpRequestMessage(HttpMethod.Post, CRIF_ENDPOINT_URL);
-                request1.Headers.Add("requestXml", requestXML1.Replace("\r", "").Replace("\n", ""));
+                request1.Headers.Add("requestXml", finalXml1);
                 request1.Headers.Add("UserId", CRIF_USER_ID);
                 request1.Headers.Add("password", CRIF_PASSWORD);
                 request1.Headers.Add("mbrid", CRIF_MBRID);
@@ -134,12 +161,18 @@ namespace JC.Criff.Highmark
                 request1.Headers.Add("productVersion", "2.0");
                 request1.Headers.Add("reqVolType", "INDV");
 
+                //_logger.LogInfo($"finalXml1 : {finalXml1}");
+               // _logger.LogInfo($"UserId : {CRIF_USER_ID}");
+               // _logger.LogInfo($"password : {CRIF_PASSWORD}");
+               // _logger.LogInfo($"mbrid : {CRIF_MBRID}");
+
                 var response2 = await _http.SendAsync(request1);
                 if (!response2.IsSuccessStatusCode) {
+                    _logger.LogInfo($"http Response : {response2.Content.ReadAsStringAsync().Result}");
                     return await Task.FromResult(new FusionParsedResponse { success = false, StatusCode = (int)response.StatusCode, Message = $"EXCEPTION" });
                 }
                 var finalResponse = await response2.Content.ReadAsStringAsync();
-
+               // _logger.LogInfo($"1 Response XML finalResponse : {finalResponse.Replace("\r", "").Replace("\n", "")}");
                 var parsed = FusionResponseParser.Parse(finalResponse);
                 parsed.success = true;
                 parsed.Message = "success";
