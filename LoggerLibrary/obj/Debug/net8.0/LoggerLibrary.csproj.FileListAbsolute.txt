@@ -19,6 +19,7 @@ D:\Junoon Capital\ashish-junoon\SUITE_APPLICATION\SUITE_CREDIT_API\LoggerLibrary
 D:\Junoon Capital\ashish-junoon\SUITE_APPLICATION\SUITE_CREDIT_API\LoggerLibrary\obj\Debug\net8.0\LoggerLibrary.AssemblyInfoInputs.cache
 D:\Junoon Capital\ashish-junoon\SUITE_APPLICATION\SUITE_CREDIT_API\LoggerLibrary\obj\Debug\net8.0\LoggerLibrary.AssemblyInfo.cs
 D:\Junoon Capital\ashish-junoon\SUITE_APPLICATION\SUITE_CREDIT_API\LoggerLibrary\obj\Debug\net8.0\LoggerLibrary.csproj.CoreCompileInputs.cache
+D:\Junoon Capital\ashish-junoon\SUITE_APPLICATION\SUITE_CREDIT_API\LoggerLibrary\obj\Debug\net8.0\LoggerLibrary.sourcelink.json
 D:\Junoon Capital\ashish-junoon\SUITE_APPLICATION\SUITE_CREDIT_API\LoggerLibrary\obj\Debug\net8.0\LoggerLibrary.dll
 D:\Junoon Capital\ashish-junoon\SUITE_APPLICATION\SUITE_CREDIT_API\LoggerLibrary\obj\Debug\net8.0\refint\LoggerLibrary.dll
 D:\Junoon Capital\ashish-junoon\SUITE_APPLICATION\SUITE_CREDIT_API\LoggerLibrary\obj\Debug\net8.0\LoggerLibrary.pdb

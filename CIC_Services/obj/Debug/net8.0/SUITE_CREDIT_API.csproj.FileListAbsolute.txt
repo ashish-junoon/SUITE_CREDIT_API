@@ -597,6 +597,7 @@ D:\Junoon Capital\ashish-junoon\SUITE_APPLICATION\SUITE_CREDIT_API\CIC_Services\
 D:\Junoon Capital\ashish-junoon\SUITE_APPLICATION\SUITE_CREDIT_API\CIC_Services\obj\Debug\net8.0\SUITE_CREDIT_API.csproj.CoreCompileInputs.cache
 D:\Junoon Capital\ashish-junoon\SUITE_APPLICATION\SUITE_CREDIT_API\CIC_Services\obj\Debug\net8.0\SUITE_CREDIT_API.MvcApplicationPartsAssemblyInfo.cs
 D:\Junoon Capital\ashish-junoon\SUITE_APPLICATION\SUITE_CREDIT_API\CIC_Services\obj\Debug\net8.0\SUITE_CREDIT_API.MvcApplicationPartsAssemblyInfo.cache
+D:\Junoon Capital\ashish-junoon\SUITE_APPLICATION\SUITE_CREDIT_API\CIC_Services\obj\Debug\net8.0\SUITE_CREDIT_API.sourcelink.json
 D:\Junoon Capital\ashish-junoon\SUITE_APPLICATION\SUITE_CREDIT_API\CIC_Services\obj\Debug\net8.0\rjimswa.dswa.cache.json
 D:\Junoon Capital\ashish-junoon\SUITE_APPLICATION\SUITE_CREDIT_API\CIC_Services\obj\Debug\net8.0\rjsmrazor.dswa.cache.json
 D:\Junoon Capital\ashish-junoon\SUITE_APPLICATION\SUITE_CREDIT_API\CIC_Services\obj\Debug\net8.0\rjsmcshtml.dswa.cache.json

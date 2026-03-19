@@ -105,6 +105,14 @@ app.UseStaticFiles(new StaticFileOptions
     RequestPath = "/crif_report"   // ✅ public URL prefix
 });
 
+app.UseStaticFiles(new StaticFileOptions
+{
+    FileProvider = new PhysicalFileProvider(
+        Path.Combine(Directory.GetCurrentDirectory(), "FusionReport")
+    ),
+    RequestPath = "/FusionReport"   // ✅ public URL prefix
+});
+
 app.UseSwaggerUI(c =>
 {
     c.SwaggerEndpoint("/swagger/v1/swagger.json", "CIC Services V1");

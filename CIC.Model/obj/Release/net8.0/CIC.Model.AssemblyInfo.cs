@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("CIC.Model")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Release")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+fde7adeea051cdb6a9c222183652ecc77bb224c5")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+5ce241fb5db5d203e186bae9af9fef4e3858681e")]
 [assembly: System.Reflection.AssemblyProductAttribute("CIC.Model")]
 [assembly: System.Reflection.AssemblyTitleAttribute("CIC.Model")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

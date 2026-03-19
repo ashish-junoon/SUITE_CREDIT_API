@@ -776,6 +776,7 @@ D:\Junoon Capital\ashish-junoon\SUITE_APPLICATION\SUITE_CREDIT_API\JC.TransUnion
 D:\Junoon Capital\ashish-junoon\SUITE_APPLICATION\SUITE_CREDIT_API\JC.TransUnion.Cibil\obj\Debug\net8.0\JC.TransUnion.Cibil.AssemblyInfoInputs.cache
 D:\Junoon Capital\ashish-junoon\SUITE_APPLICATION\SUITE_CREDIT_API\JC.TransUnion.Cibil\obj\Debug\net8.0\JC.TransUnion.Cibil.AssemblyInfo.cs
 D:\Junoon Capital\ashish-junoon\SUITE_APPLICATION\SUITE_CREDIT_API\JC.TransUnion.Cibil\obj\Debug\net8.0\JC.TransUnion.Cibil.csproj.CoreCompileInputs.cache
+D:\Junoon Capital\ashish-junoon\SUITE_APPLICATION\SUITE_CREDIT_API\JC.TransUnion.Cibil\obj\Debug\net8.0\JC.TransUnion.Cibil.sourcelink.json
 D:\Junoon Capital\ashish-junoon\SUITE_APPLICATION\SUITE_CREDIT_API\JC.TransUnion.Cibil\obj\Debug\net8.0\JC.Trans.2C19C93A.Up2Date
 D:\Junoon Capital\ashish-junoon\SUITE_APPLICATION\SUITE_CREDIT_API\JC.TransUnion.Cibil\obj\Debug\net8.0\JC.TransUnion.Cibil.dll
 D:\Junoon Capital\ashish-junoon\SUITE_APPLICATION\SUITE_CREDIT_API\JC.TransUnion.Cibil\obj\Debug\net8.0\refint\JC.TransUnion.Cibil.dll

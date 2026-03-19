@@ -772,6 +772,7 @@ D:\Junoon Capital\ashish-junoon\SUITE_APPLICATION\SUITE_CREDIT_API\JC.DataUtilit
 D:\Junoon Capital\ashish-junoon\SUITE_APPLICATION\SUITE_CREDIT_API\JC.DataUtility\obj\Debug\net8.0\CIC.DataUtility.AssemblyInfoInputs.cache
 D:\Junoon Capital\ashish-junoon\SUITE_APPLICATION\SUITE_CREDIT_API\JC.DataUtility\obj\Debug\net8.0\CIC.DataUtility.AssemblyInfo.cs
 D:\Junoon Capital\ashish-junoon\SUITE_APPLICATION\SUITE_CREDIT_API\JC.DataUtility\obj\Debug\net8.0\CIC.DataUtility.csproj.CoreCompileInputs.cache
+D:\Junoon Capital\ashish-junoon\SUITE_APPLICATION\SUITE_CREDIT_API\JC.DataUtility\obj\Debug\net8.0\CIC.DataUtility.sourcelink.json
 D:\Junoon Capital\ashish-junoon\SUITE_APPLICATION\SUITE_CREDIT_API\JC.DataUtility\obj\Debug\net8.0\CIC.Data.D1B78E62.Up2Date
 D:\Junoon Capital\ashish-junoon\SUITE_APPLICATION\SUITE_CREDIT_API\JC.DataUtility\obj\Debug\net8.0\CIC.DataUtility.dll
 D:\Junoon Capital\ashish-junoon\SUITE_APPLICATION\SUITE_CREDIT_API\JC.DataUtility\obj\Debug\net8.0\refint\CIC.DataUtility.dll

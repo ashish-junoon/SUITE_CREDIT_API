@@ -40,10 +40,10 @@
         {
             public const string CRIF_APPID = "JUNOBBCDETAILS11115469181";
             public const string CRIF_MBRID = "NBF0004824";
-            public const string CRIF_USER_ID = "prodbbc@junooncapital";
+            public const string CRIF_USER_ID = "prodfusion@junooncapital";
             public const string CRIF_PRODUCT_CODE = "BBC_CONSUMER_SCORE#85#2.0";
-            public const string CRIF_PASSWORD = "B7464FA22684EF3865FFF26E1EBD7650F1655449";
-            public const string CRIF_FUSION_ENDPOINT_URL = "";
+            public const string CRIF_PASSWORD = "3D072E784B93C2FB89C07351C44A0541C59C80FB";
+            public const string CRIF_FUSION_ENDPOINT_URL = "https://hub.crifhighmark.com/Inquiry/Fusion/FusionService";
             public const string CRIF_CUSTOMER_NAME = "JUNOON CAPITAL SERVICES PRIVATE LIMITED";
         }
     }

@@ -1,10 +1,8 @@
-﻿using CIC.DataUtility.Repository;
-using CIC.Helper;
+﻿using CIC.Helper;
 using CIC.Model.Criff.Request;
 using CIC.Model.Criff.Response;
 using CIC_Services.Interfaces;
 using JC.Criff.Highmark;
-using JC.TransUnion.Cibil.Models;
 using LoggerLibrary;
 using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
@@ -21,21 +19,53 @@ namespace CIC_Services.Services
         private readonly ILoggerManager _logger;
         private readonly IOptions<CIC.DataUtility.AppSettingModel> _appsetting;
         private readonly MethodBase method;
-        public CrifService(ICirffServiceApp cirffServiceApp, IHttpContextAccessor contextAccessor, ILoggerManager logger, IOptions<CIC.DataUtility.AppSettingModel> options)
+        private readonly IWebHostEnvironment _env;
+        public CrifService(IWebHostEnvironment env,ICirffServiceApp cirffServiceApp, IHttpContextAccessor contextAccessor, ILoggerManager logger, IOptions<CIC.DataUtility.AppSettingModel> options)
         {
             _cirffServiceApp = cirffServiceApp;
             _contextAccessor = contextAccessor;
             _logger = logger;
             _appsetting = options;
             method = MethodBase.GetCurrentMethod();
+            _env = env;
         }
 
         public async Task<FusionResponseReturn> CriffPrefil(CrifPrefillRQ request, bool CRIF_FUSION_PROD, string company_id)
         {
             var result = await _cirffServiceApp.CriffPrefil(request, CRIF_FUSION_PROD, company_id);
-
+           // _logger.LogInfo(message: $"Class Name : {method.DeclaringType?.Name} Method Name: {method.Name}, Response from service: {JsonConvert.SerializeObject(result)}");
             var fusionresponse = CIC_Services.ResultParser.CiffFusion.ResultParser.ParseResponse(result);
+
+            string filePath =  SaveHtml(result, fusionresponse?.transaction_id);
+            fusionresponse.data.html_url = filePath;
             return fusionresponse;
+        }
+
+
+        public string SaveHtml(FusionParsedResponse response, string trn_id)
+        {
+            var request = _contextAccessor?.HttpContext.Request;
+            try
+            {
+                string htmlContent = response?.HtmlContent;
+                string folderPath = Path.Combine(_env.ContentRootPath, "FusionReport");
+
+                if (!Directory.Exists(folderPath))
+                    Directory.CreateDirectory(folderPath);
+
+                string filePath = Path.Combine(folderPath, $"{trn_id}.html");
+
+                File.WriteAllText(filePath, htmlContent);
+
+
+                return $"{request.Scheme}://{request.Host}/FusionReport/{trn_id}.html";
+            }
+            catch (Exception ex)
+            {
+               _logger.LogError($"Class Name : {method.DeclaringType?.Name} Method Name: SaveHtml, Error Details: {ex.Message}");
+                return null;
+            }
+           
         }
 
         public async Task<CrifResponseReturn> AuthQuestionnaireCriff(AuthRQ request, bool CRIF_HIGHMARK_SERVICES_PROD)

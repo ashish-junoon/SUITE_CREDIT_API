@@ -764,6 +764,7 @@ D:\Junoon Capital\ashish-junoon\SUITE_APPLICATION\SUITE_CREDIT_API\CIC.Helper\ob
 D:\Junoon Capital\ashish-junoon\SUITE_APPLICATION\SUITE_CREDIT_API\CIC.Helper\obj\Debug\net8.0\CIC.Helper.AssemblyInfoInputs.cache
 D:\Junoon Capital\ashish-junoon\SUITE_APPLICATION\SUITE_CREDIT_API\CIC.Helper\obj\Debug\net8.0\CIC.Helper.AssemblyInfo.cs
 D:\Junoon Capital\ashish-junoon\SUITE_APPLICATION\SUITE_CREDIT_API\CIC.Helper\obj\Debug\net8.0\CIC.Helper.csproj.CoreCompileInputs.cache
+D:\Junoon Capital\ashish-junoon\SUITE_APPLICATION\SUITE_CREDIT_API\CIC.Helper\obj\Debug\net8.0\CIC.Helper.sourcelink.json
 D:\Junoon Capital\ashish-junoon\SUITE_APPLICATION\SUITE_CREDIT_API\CIC.Helper\obj\Debug\net8.0\CIC.Helper.csproj.Up2Date
 D:\Junoon Capital\ashish-junoon\SUITE_APPLICATION\SUITE_CREDIT_API\CIC.Helper\obj\Debug\net8.0\CIC.Helper.dll
 D:\Junoon Capital\ashish-junoon\SUITE_APPLICATION\SUITE_CREDIT_API\CIC.Helper\obj\Debug\net8.0\refint\CIC.Helper.dll

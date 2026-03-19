@@ -768,6 +768,7 @@ D:\Junoon Capital\ashish-junoon\SUITE_APPLICATION\SUITE_CREDIT_API\JC.Experian\o
 D:\Junoon Capital\ashish-junoon\SUITE_APPLICATION\SUITE_CREDIT_API\JC.Experian\obj\Debug\net8.0\JC.Experian.AssemblyInfoInputs.cache
 D:\Junoon Capital\ashish-junoon\SUITE_APPLICATION\SUITE_CREDIT_API\JC.Experian\obj\Debug\net8.0\JC.Experian.AssemblyInfo.cs
 D:\Junoon Capital\ashish-junoon\SUITE_APPLICATION\SUITE_CREDIT_API\JC.Experian\obj\Debug\net8.0\JC.Experian.csproj.CoreCompileInputs.cache
+D:\Junoon Capital\ashish-junoon\SUITE_APPLICATION\SUITE_CREDIT_API\JC.Experian\obj\Debug\net8.0\JC.Experian.sourcelink.json
 D:\Junoon Capital\ashish-junoon\SUITE_APPLICATION\SUITE_CREDIT_API\JC.Experian\obj\Debug\net8.0\JC.Exper.0FADCA99.Up2Date
 D:\Junoon Capital\ashish-junoon\SUITE_APPLICATION\SUITE_CREDIT_API\JC.Experian\obj\Debug\net8.0\JC.Experian.dll
 D:\Junoon Capital\ashish-junoon\SUITE_APPLICATION\SUITE_CREDIT_API\JC.Experian\obj\Debug\net8.0\refint\JC.Experian.dll

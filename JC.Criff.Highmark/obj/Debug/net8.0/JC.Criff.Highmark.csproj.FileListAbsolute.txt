@@ -776,6 +776,7 @@ D:\Junoon Capital\ashish-junoon\SUITE_APPLICATION\SUITE_CREDIT_API\JC.Criff.High
 D:\Junoon Capital\ashish-junoon\SUITE_APPLICATION\SUITE_CREDIT_API\JC.Criff.Highmark\obj\Debug\net8.0\JC.Criff.Highmark.AssemblyInfoInputs.cache
 D:\Junoon Capital\ashish-junoon\SUITE_APPLICATION\SUITE_CREDIT_API\JC.Criff.Highmark\obj\Debug\net8.0\JC.Criff.Highmark.AssemblyInfo.cs
 D:\Junoon Capital\ashish-junoon\SUITE_APPLICATION\SUITE_CREDIT_API\JC.Criff.Highmark\obj\Debug\net8.0\JC.Criff.Highmark.csproj.CoreCompileInputs.cache
+D:\Junoon Capital\ashish-junoon\SUITE_APPLICATION\SUITE_CREDIT_API\JC.Criff.Highmark\obj\Debug\net8.0\JC.Criff.Highmark.sourcelink.json
 D:\Junoon Capital\ashish-junoon\SUITE_APPLICATION\SUITE_CREDIT_API\JC.Criff.Highmark\obj\Debug\net8.0\JC.Criff.600CD6B1.Up2Date
 D:\Junoon Capital\ashish-junoon\SUITE_APPLICATION\SUITE_CREDIT_API\JC.Criff.Highmark\obj\Debug\net8.0\JC.Criff.Highmark.dll
 D:\Junoon Capital\ashish-junoon\SUITE_APPLICATION\SUITE_CREDIT_API\JC.Criff.Highmark\obj\Debug\net8.0\refint\JC.Criff.Highmark.dll
