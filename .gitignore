@@ -4,3 +4,16 @@ obj/
 playwright/
 *.user
 *.suo
+/CIC.Helper/obj/Debug/net8.0/CIC.Helper.csproj.FileListAbsolute.txt
+/CIC.Model/obj/Debug/net8.0/CIC.Model.csproj.FileListAbsolute.txt
+/CIC_Services/FusionReport/23f17e19-f9ca-440a-84e3-71161352ca9d.html
+/CIC_Services/FusionReport/82f2b353-dad7-444e-8153-bc9c43eeaaaa.html
+/CIC_Services/obj/Debug/net8.0/apphost.exe
+/CIC_Services/obj/Debug/net8.0/SUITE_CREDIT_API.csproj.FileListAbsolute.txt
+/CIC_Services/SUITE_CREDIT_API.csproj
+/JC.Criff.Highmark/obj/Debug/net8.0/JC.Criff.Highmark.csproj.FileListAbsolute.txt
+/JC.DataUtility/obj/Debug/net8.0/CIC.DataUtility.csproj.FileListAbsolute.txt
+/JC.Equifax/obj/Debug/net8.0/JC.Equifax.csproj.FileListAbsolute.txt
+/JC.Experian/obj/Debug/net8.0/JC.Experian.csproj.FileListAbsolute.txt
+/JC.TransUnion.Cibil/obj/Debug/net8.0/JC.TransUnion.Cibil.csproj.FileListAbsolute.txt
+/LoggerLibrary/obj/Debug/net8.0/LoggerLibrary.csproj.FileListAbsolute.txt
