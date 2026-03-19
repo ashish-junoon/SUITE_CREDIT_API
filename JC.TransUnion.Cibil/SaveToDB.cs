@@ -1,4 +1,5 @@
 ﻿using CIC.DataUtility.Repository;
+using CIC.Model.TransUnionCibil;
 using LoggerLibrary;
 using Newtonsoft.Json.Linq;
 using System.Text.Json;
@@ -7,7 +8,7 @@ namespace JC.TransUnion.Cibil
 {
     public static class SaveToDB
     {
-        public static void PushToDatabase(object result, string guid , string requiredHeader , string requiredcompanyid , string connection , ILoggerManager logger)
+        public static void PushToDatabase(TransuniunReturnResponse result, string guid , string requiredHeader , string requiredcompanyid , string connection , ILoggerManager logger)
         {
             string assetsStatus = JsonSerializer.Serialize(result);
             JObject obj = null;

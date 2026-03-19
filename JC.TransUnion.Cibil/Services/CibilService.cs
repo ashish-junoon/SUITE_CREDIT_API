@@ -150,7 +150,8 @@ namespace JC.TransUnion.Cibil.Services
             //})}");
 
             _logger.LogInfo("PushToDatabase - Data prepared and sent for saving into database.");
-            Task.Run(() => SaveToDB.PushToDatabase(result, guid , requiredHeader , requiredcompanyid , _appsetting?.Value?.ConnectionStrings?.dbconnection ?? "", _logger));
+            
+            //Task.Run(() => SaveToDB.PushToDatabase(result, guid , requiredHeader , requiredcompanyid , _appsetting?.Value?.ConnectionStrings?.dbconnection ?? "", _logger));
             
             ProductWebTokenRequestRoot productWeb = RequestGenerator.ReturnGetProductWebTokenRequest(configModel, Unique);
 

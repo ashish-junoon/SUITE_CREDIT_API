@@ -15,6 +15,55 @@ namespace CIC.DataUtility.Repository
 {
     public class ExperianRepository
     {
+
+        public static async void SaveFusionReport(dynamic fusionresponse, string companyid, string dbconnection, ILoggerManager logger)
+        {
+            SqlParameter[] param = new SqlParameter[7];
+
+            param[0] = new SqlParameter("company_id", SqlDbType.VarChar, 20);
+            param[0].Value = companyid ?? (object)DBNull.Value;
+
+            param[1] = new SqlParameter("name", SqlDbType.VarChar, 100);
+            param[1].Value = fusionresponse?.data?.CIRReportData?.IDAndContactInfo?.PersonalInfo?.Name?.FullName
+                             ?? (object)DBNull.Value;
+
+            param[2] = new SqlParameter("mobile", SqlDbType.VarChar, 12);
+            param[2].Value = (fusionresponse?.data?.CIRReportData?.IDAndContactInfo?.Identityinfo?.Phoneinfo != null
+                              && fusionresponse.data.CIRReportData.IDAndContactInfo.Identityinfo.Phoneinfo.Count > 0)
+                             ? fusionresponse.data.CIRReportData.IDAndContactInfo.Identityinfo.Phoneinfo[0]?.IdNumber
+                             : (object)DBNull.Value;
+
+            param[3] = new SqlParameter("id_type", SqlDbType.VarChar, 20);
+            param[3].Value = (fusionresponse?.data?.CIRReportData?.IDAndContactInfo?.Identityinfo?.PANId != null
+                              && fusionresponse.data.CIRReportData.IDAndContactInfo.Identityinfo.PANId.Count > 0)
+                             ? "PAN"
+                             : (object)DBNull.Value;
+
+            param[4] = new SqlParameter("id_value", SqlDbType.VarChar, 30);
+            param[4].Value = (fusionresponse?.data?.CIRReportData?.IDAndContactInfo?.Identityinfo?.PANId != null
+                              && fusionresponse.data.CIRReportData.IDAndContactInfo.Identityinfo.PANId.Count > 0)
+                             ? fusionresponse.data.CIRReportData.IDAndContactInfo.Identityinfo.PANId[0]?.IdNumber
+                             : (object)DBNull.Value;
+
+            param[5] = new SqlParameter("message", SqlDbType.VarChar, 200);
+            param[5].Value = fusionresponse?.message ?? (object)DBNull.Value;
+
+            param[6] = new SqlParameter("provider", SqlDbType.VarChar, 200);
+            param[6].Value = "FUSION";
+
+            using (SqlConnection con = GetDBConnection.getConnection(dbconnection))
+            {
+                DataSet Objds = new DataSet();
+                try
+                {
+                    Objds = SqlHelper.ExecuteDataset(con, CommandType.StoredProcedure, "sp_insert_client_ekyc_prefill", param);
+                }
+                catch (Exception ex)
+                {
+                    logger.LogError($"Error in SaveFusionReport: {ex.Message}");
+                }
+            }
+        }
         public async static void PrepareAndSaveExperianResponseForDb(string xmlString,string company_id,string pdf_url,string connection,ILoggerManager logger)
         {
             try

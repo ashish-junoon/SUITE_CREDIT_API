@@ -1,4 +1,5 @@
-﻿using CIC.Helper;
+﻿using CIC.DataUtility.Repository;
+using CIC.Helper;
 using CIC.Model.Criff.Request;
 using CIC.Model.Criff.Response;
 using CIC_Services.Interfaces;
@@ -7,6 +8,8 @@ using LoggerLibrary;
 using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using System.ComponentModel.Design;
+using System.Data.Common;
 using System.Globalization;
 using System.Reflection;
 
@@ -33,8 +36,31 @@ namespace CIC_Services.Services
         public async Task<FusionResponseReturn> CriffPrefil(CrifPrefillRQ request, bool CRIF_FUSION_PROD, string company_id)
         {
             var result = await _cirffServiceApp.CriffPrefil(request, CRIF_FUSION_PROD, company_id);
-           // _logger.LogInfo(message: $"Class Name : {method.DeclaringType?.Name} Method Name: {method.Name}, Response from service: {JsonConvert.SerializeObject(result)}");
             var fusionresponse = CIC_Services.ResultParser.CiffFusion.ResultParser.ParseResponse(result);
+            if (fusionresponse != null && fusionresponse.data != null)
+            {
+                try
+                {
+                    await Task.Run(() =>
+                    {
+                        ExperianRepository.SaveFusionReport(
+                            fusionresponse,
+                            company_id,
+                            _appsetting?.Value?.ConnectionStrings?.dbconnection ?? "",
+                            _logger
+                        );
+                    });
+                    _logger.LogInfo($"FusionResponse saved successfully for company_id: {company_id}, transaction_id: {fusionresponse?.transaction_id}");
+                }
+                catch (Exception ex)
+                {
+                    _logger.LogError($"Error while saving FusionResponse for company_id: {company_id}, transaction_id: {fusionresponse?.transaction_id}, Exception: {ex.Message}");
+                }
+            }
+            else
+            {
+                _logger.LogError($"FusionResponse is null or empty for company_id: {company_id}. Nothing saved to database.");
+            }
 
             string filePath =  SaveHtml(result, fusionresponse?.transaction_id);
             fusionresponse.data.html_url = filePath;
