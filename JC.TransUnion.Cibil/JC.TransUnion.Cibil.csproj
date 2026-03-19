@@ -25,6 +25,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\CIC.Model\CIC.Model.csproj" />
     <ProjectReference Include="..\JC.DataUtility\CIC.DataUtility.csproj" />
     <ProjectReference Include="..\LoggerLibrary\LoggerLibrary.csproj" />
   </ItemGroup>

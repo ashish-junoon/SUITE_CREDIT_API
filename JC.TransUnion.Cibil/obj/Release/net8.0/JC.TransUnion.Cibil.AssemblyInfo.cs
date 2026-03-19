@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("JC.TransUnion.Cibil")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Release")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+5ce241fb5db5d203e186bae9af9fef4e3858681e")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+45249826574f6130c5c58ae7eb188d984d37848e")]
 [assembly: System.Reflection.AssemblyProductAttribute("JC.TransUnion.Cibil")]
 [assembly: System.Reflection.AssemblyTitleAttribute("JC.TransUnion.Cibil")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

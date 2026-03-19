@@ -13,13 +13,13 @@ namespace CIC.Model.TransUnionCibil
     }
     public class ResultResponse
     {
-        public object? response { get; set; }
+        public GetCustomerAssetsModel? response { get; set; }
         public string? cibilURL { get; set; }
+        public string? score { get; set; }
+        public string? custName { get; set; }
+        public string? contactNo { get; set; }
+        public string? emailAddress { get; set; }
     }
-    //public class ResultResponse
-    //{
-    //    public JToken? response { get; set; }   // ✅ object ki jagah JToken
-    //    public string? cibilURL { get; set; }
-    //}
+    
 
 }
