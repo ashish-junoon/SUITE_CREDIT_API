@@ -30,7 +30,7 @@ namespace CIC_Services.Services
         {
             CibilApiResponse cibilApi = await _cibilService.GetCusomerCibil(request , requiredHeader , requiredcompanyid);
             TransuniunReturnResponse transuniunReturn =  ResultParser.TransCibil.ResultParser.ParseResponse(cibilApi, _logger);
-            Task.Run(() => SaveToDB.PushToDatabase(transuniunReturn, requiredHeader, requiredcompanyid, _appsetting?.Value?.ConnectionStrings?.dbconnection ?? "", _logger));
+            Task.Run(() => SaveToDB.PushToDatabase(request,transuniunReturn, requiredHeader, requiredcompanyid, _appsetting?.Value?.ConnectionStrings?.dbconnection ?? "", _logger));
             return transuniunReturn;
         }
     }

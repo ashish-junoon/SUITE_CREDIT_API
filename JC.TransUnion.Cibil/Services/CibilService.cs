@@ -132,15 +132,7 @@ namespace JC.TransUnion.Cibil.Services
             //    WriteIndented = true
             //})}");
 
-            // Fire & forget DB save (safe)
-            _ = Task.Run(() =>
-                SaveToDB.PushToDatabase(
-                    assets,
-                    transactionId,
-                    requiredHeader,
-                    requiredCompanyId,
-                    _connectionString,
-                    _logger));
+          
 
             // Step 5: Web Token
             var token = await CallApi<WebTokenRS>("/GetProductWebToken",

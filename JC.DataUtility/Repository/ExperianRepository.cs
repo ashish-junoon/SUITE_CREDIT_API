@@ -405,7 +405,7 @@ namespace CIC.DataUtility.Repository
             }
         }
 
-        public static async Task SaveCibilReport(string status,string score,string name,string pan,List<string> numbers,string transaction_id,string company_id,string vendor_code,string _Address,string dob,string email,string connection,ILoggerManager logger)
+        public static async Task SaveCibilReport(string status,string score,string name,string pan,string transaction_id,string company_id,string vendor_code,string email, string phones ,string connection,ILoggerManager logger)
         {
                 SqlParameter[] param = new SqlParameter[12];
                 param[0] = new SqlParameter("company_id", SqlDbType.VarChar, 10) { Value = company_id ?? string.Empty };
@@ -415,10 +415,10 @@ namespace CIC.DataUtility.Repository
                 param[4] = new SqlParameter("provider", SqlDbType.VarChar, 30) { Value = "CIBIL" };
                 param[5] = new SqlParameter("status", SqlDbType.VarChar, 30) { Value = status ?? string.Empty };
                 param[6] = new SqlParameter("customer_name", SqlDbType.VarChar, 50) { Value = name ?? string.Empty };
-                param[7] = new SqlParameter("mobile_number", SqlDbType.VarChar, 15) { Value = numbers?.FirstOrDefault() ?? string.Empty };
+                param[7] = new SqlParameter("mobile_number", SqlDbType.VarChar, 15) { Value = phones ?? string.Empty };
                 param[8] = new SqlParameter("transaction_id", SqlDbType.VarChar, 50) { Value = transaction_id ?? string.Empty };
-                param[9] = new SqlParameter("_Address", SqlDbType.VarChar, 100) { Value = _Address ?? string.Empty };
-                param[10] = new SqlParameter("dob", SqlDbType.VarChar, 20) { Value = dob ?? string.Empty };
+                //param[9] = new SqlParameter("_Address", SqlDbType.VarChar, 100) { Value = _Address ?? string.Empty };
+                //param[10] = new SqlParameter("dob", SqlDbType.VarChar, 20) { Value = dob ?? string.Empty };
                 param[11] = new SqlParameter("email", SqlDbType.VarChar, 100) { Value = email ?? string.Empty };
 
                 try
