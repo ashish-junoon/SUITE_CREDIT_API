@@ -13,6 +13,7 @@
     {
         public string client_id { get; set; }
         public Cirreportdata CIRReportData { get; set; }
+        public string? html_url { get; set; }
     }
 
     public class Cirreportdata

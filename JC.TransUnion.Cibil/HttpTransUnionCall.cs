@@ -64,7 +64,7 @@ namespace JC.TransUnion.Cibil
                 var response = await _httpClient.SendAsync(request);
 
                 var content = await response.Content.ReadAsStringAsync();
-                _logger.LogInfo($"Response Status: {response.StatusCode}, Response Content: {content}"); // Debug log
+               // _logger.LogInfo($"Response Status: {response.StatusCode}, Response Content: {content}"); // Debug log
                 if (!response.IsSuccessStatusCode)
                 {
                     return new

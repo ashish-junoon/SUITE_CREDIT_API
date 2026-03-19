@@ -7,7 +7,6 @@ namespace CIC_Services.ResultParser.CiffFusion
 {
     public static class ResultParser
     {
-
         public static FusionResponseReturn ParseResponse(FusionParsedResponse response)
         {
             string trnID = Guid.NewGuid().ToString();
