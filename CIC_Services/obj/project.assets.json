@@ -3528,6 +3528,7 @@
         "framework": ".NETCoreApp,Version=v8.0",
         "dependencies": {
           "CIC.DataUtility": "1.0.0",
+          "CIC.Model": "1.0.0",
           "LoggerLibrary": "1.0.0",
           "Microsoft.Extensions.Configuration.Abstractions": "10.0.2",
           "Microsoft.Extensions.Hosting": "10.0.2",

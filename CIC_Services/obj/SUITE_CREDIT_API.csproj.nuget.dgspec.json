@@ -670,6 +670,9 @@
           "net8.0": {
             "targetAlias": "net8.0",
             "projectReferences": {
+              "D:\\Junoon Capital\\ashish-junoon\\SUITE_APPLICATION\\SUITE_CREDIT_API\\CIC.Model\\CIC.Model.csproj": {
+                "projectPath": "D:\\Junoon Capital\\ashish-junoon\\SUITE_APPLICATION\\SUITE_CREDIT_API\\CIC.Model\\CIC.Model.csproj"
+              },
               "D:\\Junoon Capital\\ashish-junoon\\SUITE_APPLICATION\\SUITE_CREDIT_API\\JC.DataUtility\\CIC.DataUtility.csproj": {
                 "projectPath": "D:\\Junoon Capital\\ashish-junoon\\SUITE_APPLICATION\\SUITE_CREDIT_API\\JC.DataUtility\\CIC.DataUtility.csproj"
               },

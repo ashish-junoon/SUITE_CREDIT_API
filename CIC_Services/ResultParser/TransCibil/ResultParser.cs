@@ -1,7 +1,6 @@
 ﻿using CIC.Model.TransUnionCibil;
 using JC.TransUnion.Cibil.Models;
 using LoggerLibrary;
-using Newtonsoft.Json;
 
 namespace CIC_Services.ResultParser.TransCibil
 {
@@ -14,7 +13,11 @@ namespace CIC_Services.ResultParser.TransCibil
                 Data = new CIC.Model.TransUnionCibil.ResultResponse
                 {
                     cibilURL = cibilApi.Data?.cibilURL,
-                    response = cibilApi.Data?.response
+                    response = cibilApi.Data?.response,
+                    score = cibilApi.Data?.response?.GetCustomerAssetsResponse?.GetCustomerAssetsSuccess?.Asset?.TrueLinkCreditReport?.Borrower?.CreditScore?.riskScore,
+                    custName = cibilApi.Data?.response?.GetCustomerAssetsResponse?.GetCustomerAssetsSuccess?.Asset?.TrueLinkCreditReport?.Borrower?.BorrowerName?.Name?.Forename,
+                    contactNo = cibilApi.Data?.response?.GetCustomerAssetsResponse?.GetCustomerAssetsSuccess?.Asset?.TrueLinkCreditReport?.Borrower?.BorrowerTelephone?.FirstOrDefault()?.PhoneNumber?.Number,
+                    emailAddress = cibilApi.Data?.response?.GetCustomerAssetsResponse?.GetCustomerAssetsSuccess?.Asset?.TrueLinkCreditReport?.Borrower?.EmailAddress?.FirstOrDefault()?.Email
                 },
                 message = cibilApi.message,
                 Status = cibilApi.Status,

@@ -11053,6 +11053,7 @@
   "projectFileDependencyGroups": {
     "net8.0": [
       "CIC.DataUtility >= 1.0.0",
+      "CIC.Model >= 1.0.0",
       "LoggerLibrary >= 1.0.0",
       "Microsoft.Extensions.Configuration.Abstractions >= 10.0.2",
       "Microsoft.Extensions.Hosting >= 10.0.2",
@@ -11092,6 +11093,9 @@
         "net8.0": {
           "targetAlias": "net8.0",
           "projectReferences": {
+            "D:\\Junoon Capital\\ashish-junoon\\SUITE_APPLICATION\\SUITE_CREDIT_API\\CIC.Model\\CIC.Model.csproj": {
+              "projectPath": "D:\\Junoon Capital\\ashish-junoon\\SUITE_APPLICATION\\SUITE_CREDIT_API\\CIC.Model\\CIC.Model.csproj"
+            },
             "D:\\Junoon Capital\\ashish-junoon\\SUITE_APPLICATION\\SUITE_CREDIT_API\\JC.DataUtility\\CIC.DataUtility.csproj": {
               "projectPath": "D:\\Junoon Capital\\ashish-junoon\\SUITE_APPLICATION\\SUITE_CREDIT_API\\JC.DataUtility\\CIC.DataUtility.csproj"
             },

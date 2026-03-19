@@ -766,10 +766,10 @@ D:\Junoon Capital\ashish-junoon\SUITE_APPLICATION\SUITE_CREDIT_API\JC.TransUnion
 D:\Junoon Capital\ashish-junoon\SUITE_APPLICATION\SUITE_CREDIT_API\JC.TransUnion.Cibil\bin\Debug\net8.0\CIC.Model.dll
 D:\Junoon Capital\ashish-junoon\SUITE_APPLICATION\SUITE_CREDIT_API\JC.TransUnion.Cibil\bin\Debug\net8.0\JC.Experian.dll
 D:\Junoon Capital\ashish-junoon\SUITE_APPLICATION\SUITE_CREDIT_API\JC.TransUnion.Cibil\bin\Debug\net8.0\LoggerLibrary.dll
+D:\Junoon Capital\ashish-junoon\SUITE_APPLICATION\SUITE_CREDIT_API\JC.TransUnion.Cibil\bin\Debug\net8.0\CIC.Model.pdb
 D:\Junoon Capital\ashish-junoon\SUITE_APPLICATION\SUITE_CREDIT_API\JC.TransUnion.Cibil\bin\Debug\net8.0\CIC.DataUtility.pdb
 D:\Junoon Capital\ashish-junoon\SUITE_APPLICATION\SUITE_CREDIT_API\JC.TransUnion.Cibil\bin\Debug\net8.0\LoggerLibrary.pdb
 D:\Junoon Capital\ashish-junoon\SUITE_APPLICATION\SUITE_CREDIT_API\JC.TransUnion.Cibil\bin\Debug\net8.0\CIC.Helper.pdb
-D:\Junoon Capital\ashish-junoon\SUITE_APPLICATION\SUITE_CREDIT_API\JC.TransUnion.Cibil\bin\Debug\net8.0\CIC.Model.pdb
 D:\Junoon Capital\ashish-junoon\SUITE_APPLICATION\SUITE_CREDIT_API\JC.TransUnion.Cibil\bin\Debug\net8.0\JC.Experian.pdb
 D:\Junoon Capital\ashish-junoon\SUITE_APPLICATION\SUITE_CREDIT_API\JC.TransUnion.Cibil\obj\Debug\net8.0\JC.TransUnion.Cibil.csproj.AssemblyReference.cache
 D:\Junoon Capital\ashish-junoon\SUITE_APPLICATION\SUITE_CREDIT_API\JC.TransUnion.Cibil\obj\Debug\net8.0\JC.TransUnion.Cibil.GeneratedMSBuildEditorConfig.editorconfig

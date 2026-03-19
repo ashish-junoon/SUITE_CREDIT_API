@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("JC.Equifax")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Release")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+5ce241fb5db5d203e186bae9af9fef4e3858681e")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+c7996438d5deae2e40edd04c56689558683f7708")]
 [assembly: System.Reflection.AssemblyProductAttribute("JC.Equifax")]
 [assembly: System.Reflection.AssemblyTitleAttribute("JC.Equifax")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

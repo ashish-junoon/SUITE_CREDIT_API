@@ -1,4 +1,6 @@
-﻿namespace JC.TransUnion.Cibil.Models
+﻿using CIC.Model.TransUnionCibil;
+
+namespace JC.TransUnion.Cibil.Models
 {
     public class CibilApiResponse
     {
@@ -14,8 +16,9 @@
 
     public class BaseResponse
     {
-        public object? response { get; set; }
+        public GetCustomerAssetsModel? response { get; set; }
         public string? cibilURL { get; set; }
+        public int? score { get; set; }
     }
 
     //public class ResultResponse

@@ -2,10 +2,8 @@
 using JC.TransUnion.Cibil.Interface;
 using JC.TransUnion.Cibil.Models;
 using LoggerLibrary;
-using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Options;
-using Newtonsoft.Json.Linq;
 using System;
 using System.Net;
 using System.Text.Json;
@@ -17,197 +15,240 @@ namespace JC.TransUnion.Cibil.Services
     public class CibilService : ICibilService
     {
         private readonly ILoggerManager _logger;
-        private readonly IOptions<CIC.DataUtility.AppSettingModel> _appsetting;
         private readonly IConfiguration _config;
         private readonly FileService _fileService;
-        private static bool CIBIL_SERVICES_PROD = false;
-        private readonly ConfigModel configModel;
-        private readonly HttpTransUnionCall httpTransUnionCall;
+        private readonly ConfigModel _configModel;
+        private readonly HttpTransUnionCall _httpClient;
+        private readonly string _connectionString;
 
-        public CibilService(FileService fileService, IConfiguration config, ILoggerManager logger , IOptions<CIC.DataUtility.AppSettingModel> options)
+        public CibilService(
+            FileService fileService,
+            IConfiguration config,
+            ILoggerManager logger,
+            IOptions<CIC.DataUtility.AppSettingModel> options)
         {
             _fileService = fileService;
             _logger = logger;
             _config = config;
-            CIBIL_SERVICES_PROD = Convert.ToBoolean(_config["CIC_SERVICES:TRANSUNION_CIBIL_SERVICES_PROD"]);
-            configModel = CibilConfig.GetCibilModel(CIBIL_SERVICES_PROD);
-            httpTransUnionCall = new HttpTransUnionCall(configModel, _fileService, logger);
-            _appsetting = options;
+
+            bool isProd = Convert.ToBoolean(_config["CIC_SERVICES:TRANSUNION_CIBIL_SERVICES_PROD"]);
+            _configModel = CibilConfig.GetCibilModel(isProd);
+
+            _httpClient = new HttpTransUnionCall(_configModel, _fileService, _logger);
+            _connectionString = options?.Value?.ConnectionStrings?.dbconnection ?? "";
         }
 
+        #region PUBLIC METHODS
 
-
-        private async Task<CibilApiResponse> CallHybrid(FulfillOfferRQ payload , string requiredHeader, string requiredcompanyid)
+        public async Task<CibilApiResponse> GetCusomerCibil(
+            FulfillOfferRQ request,
+            string requiredHeader,
+            string requiredCompanyId)
         {
-            string guid = Guid.NewGuid().ToString();
-            string Unique = $"Junoon@{Random.Shared.Next(10000000, 99999999)}";
-            PingRequestRoot rqPayload = RequestGenerator.ReturnPingRequest(configModel);
-            rqPayload.PingRequest.ClientKey = Unique;
-            rqPayload.PingRequest.RequestKey = Unique;
-            _logger.LogInfo($"ping_rqPayload_request_{guid}-{JsonSerializer.Serialize(rqPayload, new JsonSerializerOptions
-            {
-                WriteIndented = true
-            })}");
-            var result = await httpTransUnionCall.CallCibil("/ping", rqPayload);
+            return await ExecuteFlow(request, requiredHeader, requiredCompanyId);
+        }
 
-            _logger.LogInfo($"ping_rqPayload_response_{guid}-{JsonSerializer.Serialize(result, new JsonSerializerOptions
+        public async Task<bool> CallPingAsync(CancellationToken token = default)
+        {
+            try
             {
-                WriteIndented = true
-            })}");
+                var unique = GenerateUnique();
+                var response = await PingAsync(unique);
 
-            PingResponseRoot pingResponse = JsonSerializer.Deserialize<PingResponseRoot>(JsonSerializer.Serialize(result));
-            if (pingResponse?.PingResponse?.ResponseStatus != "Success")
+                bool success = response?.PingResponse?.ResponseStatus == "Success";
+
+                if (success)
+                    _logger.LogInfo("Ping Success");
+                else
+                    _logger.LogError("Ping Failed");
+
+                return success;
+            }
+            catch (Exception ex)
             {
-                return new CibilApiResponse
+                _logger.LogError($"Ping Exception: {ex.Message}");
+                return false;
+            }
+        }
+
+        #endregion
+
+        #region CORE FLOW
+
+        private async Task<CibilApiResponse> ExecuteFlow(
+            FulfillOfferRQ payload,
+            string requiredHeader,
+            string requiredCompanyId)
+        {
+            string transactionId = Guid.NewGuid().ToString();
+            string unique = GenerateUnique();
+
+            // Step 1: Ping
+            var ping = await PingAsync(unique);
+            if (ping?.PingResponse?.ResponseStatus != "Success")
+                return FailResponse("Ping Failed", transactionId, ping, HttpStatusCode.Unauthorized);
+            _logger.LogInfo($"Ping Success_{unique}");
+            // Step 2: Fulfill Offer
+            var fulfill = await RetryAsync(() => FulfillOfferAsync(payload, unique));
+            //_logger.LogInfo($"FulfillOffer_{unique}-{JsonSerializer.Serialize(fulfill, new JsonSerializerOptions
+            //{
+            //    WriteIndented = true
+            //})}");
+            if (fulfill?.FulfillOfferResponse?.ResponseStatus == "Failure")
+            {
+                unique = fulfill?.FulfillOfferResponse?.FulfillOfferError?.Failure?.ClientUserKey;
+                //fulfillOfferRSRoot = new FulFillResposeRoot();
+                _logger.LogInfo($"FulfillOffer Retry_{unique}");
+                fulfill = await RetryAsync(() => FulfillOfferAsync(payload, unique));
+                _logger.LogInfo($"FulfillOffer retyr 1_{unique}-{JsonSerializer.Serialize(fulfill, new JsonSerializerOptions
                 {
-                    Status = (int)HttpStatusCode.Unauthorized,
-                    Data = new BaseResponse { response = pingResponse },
-                    message = "Ping Failed, cannot proceed with further calls",
-                    success = false,
-                    transaction_id = guid
-                };
+                    WriteIndented = true
+                })}");
             }
+           
 
+            if (fulfill?.FulfillOfferResponse?.ResponseStatus != "Success")
+                return FailResponse(
+                    fulfill?.FulfillOfferResponse?.FulfillOfferError?.Failure?.Message,
+                    transactionId,
+                    fulfill);
 
-            //var fullfilPayload = RequestGenerator.ReturnFulfillOfferRequest(configModel, payload, Unique);
-            //result = await httpTransUnionCall.CallCibil("/fulfilloffer", fullfilPayload);
-            //_logger.LogInfo($"fulfilloffer_{guid}-{JsonSerializer.Serialize(result, new JsonSerializerOptions
+            // Step 3: Auth Questions
+            var auth = await CallApi<AuthResponseRoot>("/GetAuthenticationQuestions",
+                RequestGenerator.ReturnAuthRequest(_configModel, unique));
+            //_logger.LogInfo($"GetAuthenticationQuestions_{unique}-{JsonSerializer.Serialize(auth, new JsonSerializerOptions
+            //{
+            //    WriteIndented = true
+            //})}");
+            if (auth?.GetAuthenticationQuestionsResponse?.ResponseStatus != "Success")
+                return FailResponse("Auth Failed", transactionId, auth);
+
+            // Step 4: Customer Assets
+            var assets = await CallApi<object>("/GetCustomerAssets",
+                RequestGenerator.ReturnGetCustomerAssetsRequest(_configModel, unique));
+
+            //_logger.LogInfo($"GetCustomerAssets_{unique}-{JsonSerializer.Serialize(assets, new JsonSerializerOptions
             //{
             //    WriteIndented = true
             //})}");
 
-            //FulFillResposeRoot fulfillOfferRSRoot = JsonSerializer.Deserialize<FulFillResposeRoot>(JsonSerializer.Serialize(result));
+            // Fire & forget DB save (safe)
+            _ = Task.Run(() =>
+                SaveToDB.PushToDatabase(
+                    assets,
+                    transactionId,
+                    requiredHeader,
+                    requiredCompanyId,
+                    _connectionString,
+                    _logger));
 
-            //_logger.LogInfo($"fulfilloffer_fulfillOfferRSRoot_{guid}-{JsonSerializer.Serialize(fulfillOfferRSRoot, new JsonSerializerOptions
-            //{
-            //    WriteIndented = true
-            //})}");
+            // Step 5: Web Token
+            var token = await CallApi<WebTokenRS>("/GetProductWebToken",
+                RequestGenerator.ReturnGetProductWebTokenRequest(_configModel, unique));
 
-            FulFillResposeRoot fulfillOfferRSRoot = await FulFillOffer(configModel, payload, Unique, guid);
-            if (fulfillOfferRSRoot?.FulfillOfferResponse?.ResponseStatus == "Failure")
+            string htmlUrl = BuildHtmlUrl(unique, token);
+
+            GetCustomerAssetsModel custAssets = new();
+            try
             {
-                Unique = fulfillOfferRSRoot?.FulfillOfferResponse?.FulfillOfferError?.Failure?.ClientUserKey;
-                //_logger.LogInfo($" clientUserKey : {Unique} fulfilloffer_fulfillOfferRSRoot_Failure_{guid}-{JsonSerializer.Serialize(fulfillOfferRSRoot, new JsonSerializerOptions
-                //{
-                //    WriteIndented = true
-                //})}");
-                fulfillOfferRSRoot = new FulFillResposeRoot();
-                fulfillOfferRSRoot = await FulFillOffer(configModel, payload, Unique, guid);
+                custAssets = Newtonsoft.Json.JsonConvert.DeserializeObject<GetCustomerAssetsModel>(assets.ToString());
             }
-
-            //_logger.LogInfo($"fulfilloffer_fulfillOfferRSRoot_Final_{guid}-{JsonSerializer.Serialize(fulfillOfferRSRoot, new JsonSerializerOptions
-            //{
-            //    WriteIndented = true
-            //})}");
-
-            if (fulfillOfferRSRoot?.FulfillOfferResponse?.ResponseStatus != "Success")
+            catch (Exception ex)
             {
-                return new CibilApiResponse
-                {
-                    Status = (int)HttpStatusCode.OK,
-                    Data = new BaseResponse
-                    {
-                        response = fulfillOfferRSRoot
-                    },
-                    success = false,
-                    message = fulfillOfferRSRoot?.FulfillOfferResponse?.FulfillOfferError?.Failure?.Message,
-                    transaction_id = guid
-                };
+                _logger.LogError($"Deserialization Error: {ex.Message}");
             }
-
-
-            AuthRequestRoot authRequest = RequestGenerator.ReturnAuthRequest(configModel, Unique);
-
-            result = await httpTransUnionCall.CallCibil("/GetAuthenticationQuestions", authRequest);
-            //_logger.LogInfo($"GetAuthenticationQuestions_{guid}-{JsonSerializer.Serialize(result, new JsonSerializerOptions
-            //{
-            //    WriteIndented = true
-            //})}");
-
-            AuthResponseRoot authResponseRoot = JsonSerializer.Deserialize<AuthResponseRoot>(JsonSerializer.Serialize(result));
-
-            if (authResponseRoot?.GetAuthenticationQuestionsResponse?.ResponseStatus != "Success")
-            {
-                return new CibilApiResponse
-                {
-                    Status = (int)HttpStatusCode.OK,
-                    Data = new BaseResponse
-                    {
-                        response = authResponseRoot
-                    },
-                    message = "Failure",
-                    success = false,
-                    transaction_id = guid
-                };
-            }
-
-            GetCustomerAssetsRequestRoot assetsRequestRoot = RequestGenerator.ReturnGetCustomerAssetsRequest(configModel, Unique);
-
-            result = await httpTransUnionCall.CallCibil("/GetCustomerAssets", assetsRequestRoot);
-            //_logger.LogInfo($"GetCustomerAssets_{guid}-{JsonSerializer.Serialize(result, new JsonSerializerOptions
-            //{
-            //    WriteIndented = true
-            //})}");
-
-            _logger.LogInfo("PushToDatabase - Data prepared and sent for saving into database.");
-            Task.Run(() => SaveToDB.PushToDatabase(result, guid , requiredHeader , requiredcompanyid , _appsetting?.Value?.ConnectionStrings?.dbconnection ?? "", _logger));
-            
-            ProductWebTokenRequestRoot productWeb = RequestGenerator.ReturnGetProductWebTokenRequest(configModel, Unique);
-
-            var TokenResult = await httpTransUnionCall.CallCibil("/GetProductWebToken", productWeb);
-
-            WebTokenRS responce = JsonSerializer.Deserialize<WebTokenRS>(JsonSerializer.Serialize(TokenResult));
-            string htmlUrl = $"{configModel.WEBTOKEN_BASE_URL}?enterprise={configModel.SITE_NAME}&pcc={Unique}&webtoken={responce.GetProductWebTokenResponse.GetProductWebTokenSuccess.WebToken}";
-
-            CibilApiResponse apiResponse = new CibilApiResponse
+            return new CibilApiResponse
             {
                 Status = (int)HttpStatusCode.OK,
+                success = true,
+                message = "Success",
+                transaction_id = transactionId,
                 Data = new BaseResponse
                 {
-                    response = result,
+                    response = custAssets,
                     cibilURL = htmlUrl
-                },
-                message = "success",
-                success = true,
-                transaction_id = guid
+                }
             };
-
-            _logger.LogInfo($"FinalResponse_{guid}-{JsonSerializer.Serialize(apiResponse, new JsonSerializerOptions
-            {
-                WriteIndented = true
-            })}");
-
-            return apiResponse;
         }
 
+        #endregion
 
+        #region API HELPERS
 
-
-        public async Task<CibilApiResponse> GetCusomerCibil(FulfillOfferRQ req , string requiredHeader, string requiredcompanyid)
+        private async Task<T?> CallApi<T>(string endpoint, object request)
         {
-            return await CallHybrid(req , requiredHeader , requiredcompanyid);
+            var result = await _httpClient.CallCibil(endpoint, request);
+
+            return JsonSerializer.Deserialize<T>(
+                JsonSerializer.Serialize(result));
         }
 
-
-        private async Task<FulFillResposeRoot> FulFillOffer(ConfigModel configModel, FulfillOfferRQ payload, string Unique, string guid)
+        private async Task<PingResponseRoot?> PingAsync(string unique)
         {
-            var fullfilPayload = RequestGenerator.ReturnFulfillOfferRequest(configModel, payload, Unique);
-           var result = await httpTransUnionCall.CallCibil("/fulfilloffer", fullfilPayload);
-            _logger.LogInfo($"fulfilloffer_{guid}-{JsonSerializer.Serialize(result, new JsonSerializerOptions
-            {
-                WriteIndented = true
-            })}");
+            var req = RequestGenerator.ReturnPingRequest(_configModel);
+            req.PingRequest.ClientKey = unique;
+            req.PingRequest.RequestKey = unique;
 
-            FulFillResposeRoot fulfillOfferRSRoot = JsonSerializer.Deserialize<FulFillResposeRoot>(JsonSerializer.Serialize(result));
-
-            _logger.LogInfo($"fulfilloffer_fulfillOfferRSRoot_{guid}-{JsonSerializer.Serialize(fulfillOfferRSRoot, new JsonSerializerOptions
-            {
-                WriteIndented = true
-            })}");
-
-            return fulfillOfferRSRoot;
+            return await CallApi<PingResponseRoot>("/ping", req);
         }
 
+        private async Task<FulFillResposeRoot?> FulfillOfferAsync(
+            FulfillOfferRQ payload,
+            string unique)
+        {
+            var req = RequestGenerator.ReturnFulfillOfferRequest(_configModel, payload, unique);
+            return await CallApi<FulFillResposeRoot>("/fulfilloffer", req);
+        }
+
+        #endregion
+
+        #region UTILITIES
+
+        private async Task<T?> RetryAsync<T>(Func<Task<T?>> action, int retries = 2)
+        {
+            int delay = 1000;
+
+            for (int i = 0; i <= retries; i++)
+            {
+                var result = await action();
+
+                if (result != null)
+                    return result;
+
+                await Task.Delay(delay);
+                delay *= 2;
+            }
+
+            return default;
+        }
+
+        private static string GenerateUnique()
+            => $"Junoon@{Random.Shared.Next(10000000, 99999999)}";
+
+        private string BuildHtmlUrl(string unique, WebTokenRS token)
+        {
+            var webToken = token?.GetProductWebTokenResponse?
+                .GetProductWebTokenSuccess?.WebToken;
+
+            return $"{_configModel.WEBTOKEN_BASE_URL}?enterprise={_configModel.SITE_NAME}&pcc={unique}&webtoken={webToken}";
+        }
+
+        private CibilApiResponse FailResponse(
+            string message,
+            string transactionId,
+            object response,
+            HttpStatusCode status = HttpStatusCode.OK)
+        {
+            return new CibilApiResponse
+            {
+                Status = (int)status,
+                success = false,
+                message = message,
+                transaction_id = transactionId,
+                Data = new BaseResponse { response = new GetCustomerAssetsModel() }
+            };
+        }
+
+        #endregion
     }
-
 }
