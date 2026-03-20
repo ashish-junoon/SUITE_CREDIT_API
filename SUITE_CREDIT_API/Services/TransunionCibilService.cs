@@ -15,7 +15,7 @@ namespace CIC_Services.Services
 {
     public class TransunionCibilService : ITransunionCibilService
     {
-        private readonly IHttpContextAccessor _contextAccessor;
+       // private readonly IHttpContextAccessor _contextAccessor;
         private readonly ICibilService _cibilService;
         private readonly ILoggerManager _logger;
         private readonly IOptions<CIC.DataUtility.AppSettingModel> _appsetting;
@@ -30,7 +30,8 @@ namespace CIC_Services.Services
         {
             CibilApiResponse cibilApi = await _cibilService.GetCusomerCibil(request , requiredHeader , requiredcompanyid);
             TransuniunReturnResponse transuniunReturn =  ResultParser.TransCibil.ResultParser.ParseResponse(cibilApi, _logger);
-            Task.Run(() => SaveToDB.PushToDatabase(request,transuniunReturn, requiredHeader, requiredcompanyid, _appsetting?.Value?.ConnectionStrings?.dbconnection ?? "", _logger));
+           // _logger.LogInfo($"Transunion Cibil API Response:{ JsonConvert.SerializeObject(transuniunReturn)} Connection: {_appsetting?.Value?.ConnectionStrings?.dbconnection}");
+            _ =Task.Run(() => SaveToDB.PushToDatabase(request,transuniunReturn, requiredHeader, requiredcompanyid, _appsetting?.Value?.ConnectionStrings?.dbconnection ?? "", _logger));
             return transuniunReturn;
         }
     }

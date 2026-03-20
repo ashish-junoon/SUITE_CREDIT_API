@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("JC.Experian")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Release")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+c7996438d5deae2e40edd04c56689558683f7708")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+a388a937ef19789e47de449068494cca7f77d077")]
 [assembly: System.Reflection.AssemblyProductAttribute("JC.Experian")]
 [assembly: System.Reflection.AssemblyTitleAttribute("JC.Experian")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

@@ -119,7 +119,7 @@ namespace CIC_Services.Controllers
                     _logger.LogError("Failed to convert XML to JSON.");
                     return StatusCode(500, "Error converting Experian XML to JSON.");
                 }
-               // _logger.LogInfo($"Experian Credit Report PDF Response JSON : {jsonObj}");
+                // _logger.LogInfo($"Experian Credit Report PDF Response JSON : {jsonObj}");
                 var experianResponse = await _experianService.GetCreditReportPdf(jsonObj, requiredcompanyid);
                 if (experianResponse == null)
                 {
@@ -231,34 +231,34 @@ namespace CIC_Services.Controllers
 
             CrifResponseReturn? crifResponse = new CrifResponseReturn();
 
-                try
-                {
-                    crifResponse = await _crifService.GetCreditReportV1Async(request, CRIF_HIGHMARK_SERVICES_PROD);
+            try
+            {
+                crifResponse = await _crifService.GetCreditReportV1Async(request, CRIF_HIGHMARK_SERVICES_PROD);
 
-                    if (crifResponse == null || crifResponse.Data?.B2CReport?.Header == null)
-                    {
-                        crifResponse = new CrifResponseReturn
-                        {
-                            Timestamp = crifResponse?.Timestamp,
-                            TransactionId = crifResponse?.TransactionId,
-                            StatusCode = crifResponse?.StatusCode,
-                            Status = crifResponse.Status,
-                            Data = crifResponse?.Data,
-                            message = crifResponse.message ?? "Invalid response from CRIF service"
-                        };
-                    }
-                    _logger.LogInfo("Crif Response PDF Data: " + System.Text.Json.JsonSerializer.Serialize(crifResponse));
-                    //await Task.Run(() => ExperianRepository.SaveCrifReport(crifResponsePdf, requiredcompanyid, _appsetting?.Value?.ConnectionStrings?.dbconnection ?? "", _logger));
-                    await Task.Run(() =>
-                    {
-                        ExperianRepository.PrepareAndSaveCrifResponseForDbV1(crifResponse, request, requiredcompanyid, "", _appsetting?.Value?.ConnectionStrings?.dbconnection ?? "", _logger);
-                    });
-                }
-                catch (Exception exc)
+                if (crifResponse == null || crifResponse.Data?.B2CReport?.Header == null)
                 {
-                    _logger.LogError($"CRIF JSON Parse Failed : {exc.Message}. Raw Response: {crifResponse}");
+                    crifResponse = new CrifResponseReturn
+                    {
+                        Timestamp = crifResponse?.Timestamp,
+                        TransactionId = crifResponse?.TransactionId,
+                        StatusCode = crifResponse?.StatusCode,
+                        Status = crifResponse.Status,
+                        Data = crifResponse?.Data,
+                        message = crifResponse.message ?? "Invalid response from CRIF service"
+                    };
                 }
-            
+                _logger.LogInfo("Crif Response PDF Data: " + System.Text.Json.JsonSerializer.Serialize(crifResponse));
+                //await Task.Run(() => ExperianRepository.SaveCrifReport(crifResponsePdf, requiredcompanyid, _appsetting?.Value?.ConnectionStrings?.dbconnection ?? "", _logger));
+                await Task.Run(() =>
+                {
+                    ExperianRepository.PrepareAndSaveCrifResponseForDbV1(crifResponse, request, requiredcompanyid, "", _appsetting?.Value?.ConnectionStrings?.dbconnection ?? "", _logger);
+                });
+            }
+            catch (Exception exc)
+            {
+                _logger.LogError($"CRIF JSON Parse Failed : {exc.Message}. Raw Response: {crifResponse}");
+            }
+
             return Ok(crifResponse);
         }
 
@@ -457,15 +457,7 @@ namespace CIC_Services.Controllers
                 };
                 return BadRequest(badRequestResponse);
             }
-            //CrifResponseReturn? crifResponseReturn = null;
-
-           var crifResponseReturn = await _crifService.CriffPrefil(request, CRIF_FUSION_PROD, requiredcompanyid);
-
-          
-            await Task.Run(() =>
-            {
-                //ExperianRepository.PrepareAndSaveCrifResponseForDbV1(crifResponseReturn, request, requiredcompanyid, "", _appsetting?.Value?.ConnectionStrings?.dbconnection ?? "", _logger);
-            });
+            var crifResponseReturn = await _crifService.CriffPrefil(request, CRIF_FUSION_PROD, requiredcompanyid);
             return Ok(crifResponseReturn);
 
         }

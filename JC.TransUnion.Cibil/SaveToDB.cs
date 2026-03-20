@@ -1,8 +1,6 @@
 ﻿using CIC.DataUtility.Repository;
 using CIC.Model.TransUnionCibil;
 using LoggerLibrary;
-using Newtonsoft.Json.Linq;
-using System.Text.Json;
 
 namespace JC.TransUnion.Cibil
 {
@@ -10,12 +8,12 @@ namespace JC.TransUnion.Cibil
     {
         public static void PushToDatabase(FulfillOfferRQ request,TransuniunReturnResponse result, string requiredHeader , string requiredcompanyid , string connection , ILoggerManager logger)
         {
-            string assetsStatus = JsonSerializer.Serialize(result);
-            JObject obj = null;
+            //string assetsStatus = JsonSerializer.Serialize(result);
+            //JObject obj = null;
             try
             {
-                obj = JObject.Parse(assetsStatus);
-                string status = obj["GetCustomerAssetsResponse"]?["ResponseStatus"]?.ToString();
+                //obj = JObject.Parse(assetsStatus);
+                string status = result.message;
                 string score = result.Data.score;
                 string name = result.Data.custName;
                 string pan = request.FulfillOfferRequest.CustomerInfo.IdentificationNumber.Id;
@@ -50,7 +48,7 @@ namespace JC.TransUnion.Cibil
                 }
                 catch (Exception ex)
                 {
-                    
+                    logger.LogError("PushToDatabase Trying Push to DB: " + ex.Message);
                 }
             }
             catch (Exception ex)

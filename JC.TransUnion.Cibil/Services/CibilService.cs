@@ -100,10 +100,10 @@ namespace JC.TransUnion.Cibil.Services
                 //fulfillOfferRSRoot = new FulFillResposeRoot();
                 _logger.LogInfo($"FulfillOffer Retry_{unique}");
                 fulfill = await RetryAsync(() => FulfillOfferAsync(payload, unique));
-                _logger.LogInfo($"FulfillOffer retyr 1_{unique}-{JsonSerializer.Serialize(fulfill, new JsonSerializerOptions
-                {
-                    WriteIndented = true
-                })}");
+                //_logger.LogInfo($"FulfillOffer retyr 1_{unique}-{JsonSerializer.Serialize(fulfill, new JsonSerializerOptions
+                //{
+                //    WriteIndented = true
+                //})}");
             }
            
 
