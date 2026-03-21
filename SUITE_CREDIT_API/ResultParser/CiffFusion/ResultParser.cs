@@ -70,9 +70,9 @@ namespace CIC_Services.ResultParser.CiffFusion
                             {
                                 Name = new Name
                                 {
-                                    FullName = request.Element("NAME")?.Value,
+                                    FullName = names?.FirstOrDefault()?.Element("VALUE")?.Value,
                                 },
-                                DateOfBirth = dob.FirstOrDefault().Element("REPORTED-DATE")?.Value,
+                                DateOfBirth = dateStr,
                                 Age = new Age
                                 {
                                     age = yearDiff

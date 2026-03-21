@@ -59,6 +59,7 @@ namespace CIC_Services.Services
             }
             else
             {
+                _logger.LogInfo($"company_id: {company_id}. CrifPrefillRQ: {JsonConvert.SerializeObject(request)} \n fusionresponse: {JsonConvert.SerializeObject(fusionresponse)}");
                 _logger.LogError($"FusionResponse is null or empty for company_id: {company_id}. Nothing saved to database.");
             }
 

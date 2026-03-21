@@ -27,10 +27,6 @@ namespace JC.Experian
         {
             string strResponse = string.Empty;
             string EXPERIAN_SOAP_URL = string.Empty;
-            if (payload.Name == null)
-            {
-                throw new ArgumentNullException(nameof(payload.Name), "Name cannot be null");
-            }
             if (EXPERIAN_SERVICES_PROD)
             {
                 EXPERIAN_SOAP_URL = ExperianConfig.ProdVariables.SOAP_URL;
@@ -58,7 +54,7 @@ namespace JC.Experian
                 var response = await _httpClient.SendAsync(request);
                 response.EnsureSuccessStatusCode();
                 strResponse = await response.Content.ReadAsStringAsync();
-               // _logger.LogInfo(" ExperianSoapClient Experian SOAP Response Status: " + response.StatusCode);
+                _logger.LogInfo("ExperianSoapClient Experian SOAP Response: \n" + strResponse);
             }
             catch (Exception ex)
             {

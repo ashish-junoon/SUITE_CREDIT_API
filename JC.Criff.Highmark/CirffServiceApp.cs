@@ -273,7 +273,7 @@ namespace JC.Criff.Highmark
             {
                 request = $"{requestBody.first_name}||{requestBody.last_name}||05-07-1970|||{requestBody.mobile_number}|||test@gmail.com|||||||{requestBody.uid_number}|||||||||||India|||||||{CRIF_MBRID}|{CRIF_PRODUCT_CODE}|Y|";
             }
-            _logger.LogInfo($"Main Request : {request}");
+           // _logger.LogInfo($"Main Request : {request}");
             string accessCodeRaw =
                 $"{CRIF_USER_ID}|{CRIF_MBRID}|{CRIF_PRODUCT_CODE}|{CRIF_PASSWORD}|{CIC.Helper.CommonClass.GetISTTimestamp()}";
 
@@ -290,7 +290,7 @@ namespace JC.Criff.Highmark
             //Console.WriteLine((string)jObject["albums"][0]["cover_image_url"]);
 
             stageOne = Newtonsoft.Json.JsonConvert.DeserializeObject<ResponseStages>(result);
-            _logger.LogInfo($"Response Stage 1 : {result}");
+            //_logger.LogInfo($"Response Stage 1 : {result}");
             #endregion
             if (stageOne?.status != "S06")
             {
@@ -338,7 +338,7 @@ namespace JC.Criff.Highmark
             keyValuePairs.Add("merchantID", CRIF_MBRID);
             _logger.LogInfo($"Request Stage 3 : {followUpBody}");
             var result2 = await HttpClientPost.PostAsync($"{CRIF_ENDPOINT_URL}response", followUpBody, keyValuePairs, "application/xml");
-            _logger.LogInfo($"Response Stage 3 : {result2}");
+           // _logger.LogInfo($"Response Stage 3 : {result2}");
             return result2;
         }
 
@@ -358,7 +358,7 @@ namespace JC.Criff.Highmark
 
             request = $"{requestBody.first_name}||{requestBody.last_name}||05-07-1970|||{requestBody.mobile_number}|||test@gmail.com||{requestBody.pan_number}|||||{requestBody.aadhaar_number}|||||||||||India|||||||{CRIF_MBRID}|{CRIF_PRODUCT_CODE}|Y|";
 
-            _logger.LogInfo($"Main Request : {request}");
+            //_logger.LogInfo($"Main Request : {request}");
             string accessCodeRaw =
                 $"{CRIF_USER_ID}|{CRIF_MBRID}|{CRIF_PRODUCT_CODE}|{CRIF_PASSWORD}|{CIC.Helper.CommonClass.GetISTTimestamp()}";
 
@@ -375,7 +375,7 @@ namespace JC.Criff.Highmark
             //Console.WriteLine((string)jObject["albums"][0]["cover_image_url"]);
 
             stageOne = Newtonsoft.Json.JsonConvert.DeserializeObject<ResponseStages>(result);
-            _logger.LogInfo($"Response Stage 1 : {result}");
+           // _logger.LogInfo($"Response Stage 1 : {result}");
             #endregion
             if (stageOne?.status != "S06")
             {
@@ -423,7 +423,7 @@ namespace JC.Criff.Highmark
             keyValuePairs.Add("merchantID", CRIF_MBRID);
             _logger.LogInfo($"Request Stage 3 : {followUpBody}");
             var result2 = await HttpClientPost.PostAsync($"{CRIF_ENDPOINT_URL}response", followUpBody, keyValuePairs, "application/xml");
-            _logger.LogInfo($"Response Stage 3 : {result2}");
+            //_logger.LogInfo($"Response Stage 3 : {result2}");
             return result2;
         }
 
@@ -485,7 +485,7 @@ namespace JC.Criff.Highmark
             keyValuePairs.Add("merchantID", CRIF_MBRID);
             _logger.LogInfo($"Auth Verify Request Stage 3 : {followUpBody}");
             var result2 = await HttpClientPost.PostAsync($"{CRIF_ENDPOINT_URL}response", followUpBody, keyValuePairs, "application/xml");
-            _logger.LogInfo($"Auth Verify Response Stage 3 : {result2}");
+           // _logger.LogInfo($"Auth Verify Response Stage 3 : {result2}");
             return result2;
         }
 

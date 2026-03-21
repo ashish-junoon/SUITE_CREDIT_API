@@ -39,54 +39,62 @@ namespace CIC_Services.Controllers
         [HttpPost("credit-report-experian")]
         public async Task<IActionResult> GetCreditReport([FromBody] CIC.Model.Experian.Request.ExperianRequest request, [FromHeader(Name = "token")] string requiredHeader, [FromHeader(Name = "companyid")] string requiredcompanyid)
         {
-            var accept = Request.Headers["Accept"].ToString();
-            var result = await _experianService.GetCreditReportAsync(request, requiredcompanyid);
-            //_logger.LogInfo($"Experian Credit Report Response: {JsonConvert.SerializeObject(result)}");
-            if (result.Success == false)
+            if (ModelState.IsValid)
             {
-                var badrequest = new ExperianResponse
+
+                var accept = Request.Headers["Accept"].ToString();
+                var result = await _experianService.GetCreditReportAsync(request, requiredcompanyid);
+                //_logger.LogInfo($"Experian Credit Report Response: {JsonConvert.SerializeObject(result)}");
+                if (result.Success == false)
                 {
-                    Success = false,
-                    Message = Convert.ToString(result.Data),
-                    Error = "Error fetching credit report",
-                    MessageCode = "ERR_CREDIT_REPORT",
-                    StatusCode = 400,
-                    Timestamp = DateTime.UtcNow,
-                    Transaction_id = Guid.NewGuid().ToString()
-                };
+                    var badrequest = new ExperianResponse
+                    {
+                        Success = false,
+                        Message = Convert.ToString(result.Data),
+                        Error = "Error fetching credit report",
+                        MessageCode = "ERR_CREDIT_REPORT",
+                        StatusCode = 400,
+                        Timestamp = DateTime.UtcNow,
+                        Transaction_id = Guid.NewGuid().ToString()
+                    };
+                    if (accept.Contains("application/xml", StringComparison.OrdinalIgnoreCase))
+                    {
+                        var xmlrequest = ResultParser.Experian.ResultParser.ParsetoXml(badrequest, _logger);
+                        return Content(xmlrequest.ToString(), "application/xml");
+                    }
+                    return BadRequest(badrequest);
+                }
+                var xml = ResultParser.Experian.ResultParser.ParsetoXml(result, _logger);
+                //_logger.LogInfo($"Experian Credit Report Response XML : {xml.ToString()}");
                 if (accept.Contains("application/xml", StringComparison.OrdinalIgnoreCase))
                 {
-                    var xmlrequest = ResultParser.Experian.ResultParser.ParsetoXml(badrequest, _logger);
-                    return Content(xmlrequest.ToString(), "application/xml");
+                    return Content(xml.ToString(), "application/xml");
                 }
-                return BadRequest(badrequest);
-            }
-            var xml = ResultParser.Experian.ResultParser.ParsetoXml(result, _logger);
-            //_logger.LogInfo($"Experian Credit Report Response XML : {xml.ToString()}");
-            if (accept.Contains("application/xml", StringComparison.OrdinalIgnoreCase))
-            {
-                return Content(xml.ToString(), "application/xml");
-            }
-            try
-            {
-                var jsonObj = ResultParser.Experian.ResultParser.ConvertXmlToJson<CIC.Model.Experian.ResponseNew.ExperianReturnResponseV1>(xml.ToString());
-                return Ok(jsonObj);
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError($"Error while converting XML to JSON: {ex.Message}. Raw Response: {result}");
-                var badrequest = new ExperianResponse
+                try
                 {
-                    Success = false,
-                    Message = Convert.ToString(result.Data),
-                    Error = "Error while converting XMl to JSON and Save To db",
-                    MessageCode = "ERR_CREDIT_REPORT",
-                    StatusCode = 400,
-                    Timestamp = DateTime.UtcNow,
-                    Transaction_id = Guid.NewGuid().ToString()
-                };
+                    var jsonObj = ResultParser.Experian.ResultParser.ConvertXmlToJson<CIC.Model.Experian.ResponseNew.ExperianReturnResponseV1>(xml.ToString());
+                    return Ok(jsonObj);
+                }
+                catch (Exception ex)
+                {
+                    _logger.LogError($"Error while converting XML to JSON: {ex.Message}. Raw Response: {result}");
+                    var badrequest = new ExperianResponse
+                    {
+                        Success = false,
+                        Message = Convert.ToString(result.Data),
+                        Error = "Error while converting XMl to JSON and Save To db",
+                        MessageCode = "ERR_CREDIT_REPORT",
+                        StatusCode = 400,
+                        Timestamp = DateTime.UtcNow,
+                        Transaction_id = Guid.NewGuid().ToString()
+                    };
 
-                return BadRequest(badrequest);
+                    return BadRequest(badrequest);
+                }
+            }
+            else
+            {
+                return BadRequest(ModelState);
             }
         }
 
@@ -95,10 +103,9 @@ namespace CIC_Services.Controllers
         {
             try
             {
-                if (request == null)
+                if (!ModelState.IsValid)
                 {
-                    _logger.LogError("Request object is null.");
-                    return BadRequest("Request cannot be null.");
+                    return BadRequest(ModelState);
                 }
                 var result = await _experianService.GetCreditReportAsync(request, requiredcompanyid);
                 if (result == null)
@@ -145,7 +152,7 @@ namespace CIC_Services.Controllers
 
                 //           experianResponse.Data.address= jsonObj.INProfileResponse.Current_Application.Current_Application_Details.Current_Applicant_Additional_AddressDetails.
                 //       }
-                _logger.LogInfo("Experian PDF response generated successfully.");
+               // _logger.LogInfo("Experian PDF response generated successfully.");
                 return Ok(experianResponse);
             }
             catch (Exception ex)
@@ -182,7 +189,7 @@ namespace CIC_Services.Controllers
                             message = crifResponse.message ?? "Invalid response from CRIF service"
                         };
                     }
-                    _logger.LogInfo("Crif Response PDF Data: " + System.Text.Json.JsonSerializer.Serialize(crifResponse));
+                   // _logger.LogInfo("Crif Response PDF Data: " + System.Text.Json.JsonSerializer.Serialize(crifResponse));
                     //await Task.Run(() => ExperianRepository.SaveCrifReport(crifResponsePdf, requiredcompanyid, _appsetting?.Value?.ConnectionStrings?.dbconnection ?? "", _logger));
                     await Task.Run(() =>
                     {
@@ -247,7 +254,7 @@ namespace CIC_Services.Controllers
                         message = crifResponse.message ?? "Invalid response from CRIF service"
                     };
                 }
-                _logger.LogInfo("Crif Response PDF Data: " + System.Text.Json.JsonSerializer.Serialize(crifResponse));
+               // _logger.LogInfo("Crif Response PDF Data: " + System.Text.Json.JsonSerializer.Serialize(crifResponse));
                 //await Task.Run(() => ExperianRepository.SaveCrifReport(crifResponsePdf, requiredcompanyid, _appsetting?.Value?.ConnectionStrings?.dbconnection ?? "", _logger));
                 await Task.Run(() =>
                 {
