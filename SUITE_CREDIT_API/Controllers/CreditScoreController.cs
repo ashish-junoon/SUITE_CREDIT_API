@@ -41,7 +41,6 @@ namespace CIC_Services.Controllers
         {
             if (ModelState.IsValid)
             {
-
                 var accept = Request.Headers["Accept"].ToString();
                 var result = await _experianService.GetCreditReportAsync(request, requiredcompanyid);
                 //_logger.LogInfo($"Experian Credit Report Response: {JsonConvert.SerializeObject(result)}");

@@ -37,13 +37,13 @@ namespace CIC_Services.Services
         {
             var result = await _cirffServiceApp.CriffPrefil(request, CRIF_FUSION_PROD, company_id);
             var fusionresponse = CIC_Services.ResultParser.CiffFusion.ResultParser.ParseResponse(result);
-            if (fusionresponse != null && fusionresponse.data != null)
+            if (fusionresponse != null)
             {
                 try
                 {
                     await Task.Run(() =>
                     {
-                        ExperianRepository.SaveFusionReport(
+                        ExperianRepository.SaveFusionReport(request,
                             fusionresponse,
                             company_id,
                             _appsetting?.Value?.ConnectionStrings?.dbconnection ?? "",

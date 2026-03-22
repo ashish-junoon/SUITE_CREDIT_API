@@ -16,7 +16,7 @@ namespace CIC.DataUtility.Repository
     public class ExperianRepository
     {
 
-        public static async void SaveFusionReport(dynamic fusionresponse, string companyid, string dbconnection, ILoggerManager logger)
+        public static void SaveFusionReport(CrifPrefillRQ request,dynamic fusionresponse, string companyid, string dbconnection, ILoggerManager logger)
         {
             SqlParameter[] param = new SqlParameter[7];
 
@@ -25,24 +25,24 @@ namespace CIC.DataUtility.Repository
 
             param[1] = new SqlParameter("name", SqlDbType.VarChar, 100);
             param[1].Value = fusionresponse?.data?.CIRReportData?.IDAndContactInfo?.PersonalInfo?.Name?.FullName
-                             ?? (object)DBNull.Value;
+                             ?? request.customerName;
 
             param[2] = new SqlParameter("mobile", SqlDbType.VarChar, 12);
             param[2].Value = (fusionresponse?.data?.CIRReportData?.IDAndContactInfo?.Identityinfo?.Phoneinfo != null
-                              && fusionresponse.data.CIRReportData.IDAndContactInfo.Identityinfo.Phoneinfo.Count > 0)
-                             ? fusionresponse.data.CIRReportData.IDAndContactInfo.Identityinfo.Phoneinfo[0]?.IdNumber
-                             : (object)DBNull.Value;
+                              && fusionresponse?.data.CIRReportData.IDAndContactInfo.Identityinfo.Phoneinfo.Count > 0)
+                             ? fusionresponse?.data.CIRReportData.IDAndContactInfo.Identityinfo.Phoneinfo[0]?.IdNumber
+                             : request.mobile;
 
             param[3] = new SqlParameter("id_type", SqlDbType.VarChar, 20);
             param[3].Value = (fusionresponse?.data?.CIRReportData?.IDAndContactInfo?.Identityinfo?.PANId != null
-                              && fusionresponse.data.CIRReportData.IDAndContactInfo.Identityinfo.PANId.Count > 0)
+                              && fusionresponse?.data.CIRReportData.IDAndContactInfo.Identityinfo.PANId.Count > 0)
                              ? "PAN"
                              : (object)DBNull.Value;
 
             param[4] = new SqlParameter("id_value", SqlDbType.VarChar, 30);
             param[4].Value = (fusionresponse?.data?.CIRReportData?.IDAndContactInfo?.Identityinfo?.PANId != null
-                              && fusionresponse.data.CIRReportData.IDAndContactInfo.Identityinfo.PANId.Count > 0)
-                             ? fusionresponse.data.CIRReportData.IDAndContactInfo.Identityinfo.PANId[0]?.IdNumber
+                              && fusionresponse?.data.CIRReportData.IDAndContactInfo.Identityinfo.PANId.Count > 0)
+                             ? fusionresponse?.data.CIRReportData.IDAndContactInfo.Identityinfo.PANId[0]?.IdNumber
                              : (object)DBNull.Value;
 
             param[5] = new SqlParameter("message", SqlDbType.VarChar, 200);

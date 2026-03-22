@@ -32,7 +32,6 @@ namespace CIC_Services.Services
         {
             try
             {
-                //CIC.Helper.ValidationHelper.ValidateMobile(req.Mobile);
                 CIC.Helper.ValidationHelper.ValidatePan(req.Pan);
             }
             catch (Exception ex)
@@ -72,7 +71,7 @@ namespace CIC_Services.Services
             catch (Exception ex)
             {
 
-                _logger.LogError($"Experian Data Save to DB Error. {ex.Message}");
+                _logger.LogError($"Experian Data Save to DB Error. {ex.Message} ParseExperianXML response : \n{reportJson}");
             }
             
             return new CIC.Model.Experian.Response.ExperianResponse
@@ -96,7 +95,7 @@ namespace CIC_Services.Services
                     pdfurl = await HtmlToPdfService.GeneratePdfAndGetUrlAsync(html, "Experian_Report", _logger);
                     string domain = $"{_contextAccessor.HttpContext?.Request.Scheme}://{_contextAccessor.HttpContext?.Request.Host}";
                     pdfurl = $"{domain}/{pdfurl}";
-                    _logger.LogInfo("Experian PDF URL: " + pdfurl);
+                    //_logger.LogInfo("Experian PDF URL: " + pdfurl);
                     var currentApplicant = response.INProfileResponse?.Current_Application?.Current_Application_Details?.Current_Applicant_Details;
                     var score = response.INProfileResponse?.SCORE;
                     experianResponsePdf = new ExperianResponsePdf
@@ -115,7 +114,7 @@ namespace CIC_Services.Services
                             
                         }
                     };
-                    _logger.LogInfo("Experian Response PDF Data: " + System.Text.Json.JsonSerializer.Serialize(experianResponsePdf));
+                   // _logger.LogInfo("Experian Response PDF Data: " + System.Text.Json.JsonSerializer.Serialize(experianResponsePdf));
                    // await ExperianRepository.SaveExperianReport(experianResponsePdf, company_id, _appsetting?.Value?.ConnectionStrings?.dbconnection ?? "", _logger);
                 }
             }

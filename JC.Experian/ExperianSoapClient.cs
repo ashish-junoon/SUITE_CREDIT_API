@@ -25,6 +25,7 @@ namespace JC.Experian
 
         public async Task<string> FetchCreditReportAsync(ExperianRequest payload)
         {
+            string xmlBody = string.Empty;
             string strResponse = string.Empty;
             string EXPERIAN_SOAP_URL = string.Empty;
             if (EXPERIAN_SERVICES_PROD)
@@ -47,18 +48,18 @@ namespace JC.Experian
 
             try
             {
-                var xmlBody = SoapTemplateBuilder.Build(experianPayload, firstName, lastName, EXPERIAN_SERVICES_PROD);
+                xmlBody = SoapTemplateBuilder.Build(experianPayload, firstName, lastName, EXPERIAN_SERVICES_PROD);
                // _logger.LogInfo("ExperianSoapClient Experian SOAP Request XML: " + xmlBody);
                 var request = new HttpRequestMessage(HttpMethod.Post, EXPERIAN_SOAP_URL);
                 request.Content = new StringContent(xmlBody, Encoding.UTF8, "text/xml");
                 var response = await _httpClient.SendAsync(request);
                 response.EnsureSuccessStatusCode();
                 strResponse = await response.Content.ReadAsStringAsync();
-                _logger.LogInfo("ExperianSoapClient Experian SOAP Response: \n" + strResponse);
+                //_logger.LogInfo($"ExperianSoapClient Experian SOAP Request: \n {xmlBody} \n Response: {strResponse}");
             }
             catch (Exception ex)
             {
-                _logger.LogError("Experian SOAP Response Exception: " + ex.Message);
+                _logger.LogError($"Experian SOAP Response Exception: {ex.Message} \n RequestXML : \n{xmlBody}");
             }
 
             return strResponse;
