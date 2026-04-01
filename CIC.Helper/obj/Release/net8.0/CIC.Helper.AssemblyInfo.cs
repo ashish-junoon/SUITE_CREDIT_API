@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("CIC.Helper")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Release")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+aec6c1deadd04077e265aad88b2be2a6a2ee6d94")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+64e4ac81c95bda8e1edfb00e02a1ce2865eb11a5")]
 [assembly: System.Reflection.AssemblyProductAttribute("CIC.Helper")]
 [assembly: System.Reflection.AssemblyTitleAttribute("CIC.Helper")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

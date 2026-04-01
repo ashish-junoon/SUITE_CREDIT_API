@@ -1,0 +1,121 @@
+{
+  "timestamp": "2026-03-31T14:11:39.4897648+05:30",
+  "transaction_id": "91932d69-7d8c-48a1-a030-033b15f3a597",
+  "status": "success",
+  "data": {
+    "client_id": "91932d69-7d8c-48a1-a030-033b15f3a597",
+    "CIRReportData": {
+      "IDAndContactInfo": {
+        "PersonalInfo": {
+          "Name": {
+            "FullName": "REKHA DEVI",
+            "FirstName": null,
+            "LastName": null
+          },
+          "AliasName": null,
+          "DateOfBirth": "12-11-1992",
+          "Gender": null,
+          "Age": {
+            "age": 34
+          },
+          "PlaceOfBirthInfo": null,
+          "IncomeRange": null,
+          "Occupation": null
+        },
+        "Identityinfo": {
+          "PANId": [
+            {
+              "seq": "1",
+              "ReportedDate": "31-03-2022",
+              "IdNumber": "AHJPN0827A"
+            },
+            {
+              "seq": "2",
+              "ReportedDate": "31-03-2022",
+              "IdNumber": "BWTPK5581J"
+            },
+            {
+              "seq": "3",
+              "ReportedDate": "30-06-2021",
+              "IdNumber": "CETPK0055A"
+            }
+          ],
+          "Addressinfo": [
+            {
+              "seq": "1",
+              "ReportedDate": "15-03-2026",
+              "IdNumber": "0 SHIVRAJ NAGAR CHHITTUPUR BHU VARANASI 221005 UP "
+            },
+            {
+              "seq": "2",
+              "ReportedDate": "15-03-2026",
+              "IdNumber": "FLAT NO 204 SHREE SWAMI SAI KRUPA CHS LTD ROAD NO 5 BESIDE SHREE SAI SAMARTH MATH NATWAR NAGAR JOGESHWARI EAST MUMBAI MUMBAI MAHARASHTRA- 400060 INDIA 400060 MH "
+            },
+            {
+              "seq": "3",
+              "ReportedDate": "15-03-2026",
+              "IdNumber": "S BY O PRAMOD KUMAR KUSHWAHA 0 SHIVRAJ NAGAR CHHITTUPUR VARANASI HINDU VISHWA VIDHYALAYA VARANASI 221005 UP "
+            }
+          ],
+          "Phoneinfo": [
+            {
+              "seq": "1",
+              "ReportedDate": "15-03-2026",
+              "IdNumber": "6688493648"
+            },
+            {
+              "seq": "2",
+              "ReportedDate": "15-05-2025",
+              "IdNumber": "000808090931194"
+            },
+            {
+              "seq": "3",
+              "ReportedDate": "31-08-2024",
+              "IdNumber": "7571811520"
+            }
+          ],
+          "Emailaddressinfo": [
+            {
+              "seq": "1",
+              "ReportedDate": "30-06-2021",
+              "IdNumber": "rekha76@gmail.com"
+            },
+            {
+              "seq": "2",
+              "ReportedDate": "28-02-2021",
+              "IdNumber": "rekhapratapkushwaha@vijayabank.co.in"
+            }
+          ],
+          "DobInfo": [
+            {
+              "seq": "1",
+              "ReportedDate": "15-08-2025",
+              "IdNumber": "12-11-1992"
+            },
+            {
+              "seq": "2",
+              "ReportedDate": "31-05-2023",
+              "IdNumber": "09-09-1985"
+            },
+            {
+              "seq": "3",
+              "ReportedDate": "30-06-2021",
+              "IdNumber": "13-11-1992"
+            }
+          ],
+          "Voterid": [],
+          "NationalIdCard": [],
+          "OtherId": [
+            {
+              "seq": "1",
+              "ReportedDate": "30-06-2021",
+              "IdNumber": "XXXXXXXX1838"
+            }
+          ]
+        }
+      }
+    },
+    "html_url": "https://uatcredit.verifiedu.in/FusionReport/9a3ae3e5-7d10-4662-a386-552fd56a471f.html"
+  },
+  "message": "success"
+}

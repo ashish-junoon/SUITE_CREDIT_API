@@ -29,6 +29,7 @@
     <Folder Include="FusionReport\" />
     <Folder Include="Experian_Report\" />
     <Folder Include="FusionReport\" />
+    <Folder Include="UatResult\" />
   </ItemGroup>
 
   <ItemGroup>

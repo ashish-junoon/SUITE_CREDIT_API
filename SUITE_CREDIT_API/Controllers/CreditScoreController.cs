@@ -7,6 +7,7 @@ using LoggerLibrary;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
+using SUITE_CREDIT_API;
 
 namespace CIC_Services.Controllers
 {
@@ -20,8 +21,9 @@ namespace CIC_Services.Controllers
         private readonly IOptions<CIC.DataUtility.AppSettingModel> _appsetting;
         private readonly IConfiguration _config;
         private readonly ILoggerManager _logger;
+        private readonly JsonService _jsonService;
         private static bool CIBIL_SERVICES_PROD, CRIF_FUSION_PROD, CRIF_HIGHMARK_SERVICES_PROD = false;
-        public CreditScoreController(ICrifService crifService, IExperianService experianService, ITransunionCibilService transunionCibilService, IConfiguration config, ILoggerManager logger, IOptions<CIC.DataUtility.AppSettingModel> options)
+        public CreditScoreController(ICrifService crifService, IExperianService experianService, ITransunionCibilService transunionCibilService, IConfiguration config, ILoggerManager logger, IOptions<CIC.DataUtility.AppSettingModel> options, JsonService jsonService)
         {
             _crifService = crifService;
             _transunionCibilService = transunionCibilService;
@@ -32,6 +34,7 @@ namespace CIC_Services.Controllers
             CRIF_HIGHMARK_SERVICES_PROD = Convert.ToBoolean(_config["CIC_SERVICES:CRIF_HIGHMARK_SERVICES_PROD"]);
             CRIF_FUSION_PROD = Convert.ToBoolean(_config["CIC_SERVICES:CRIF_FUSION_PROD"]);
             _logger = logger;
+            _jsonService = jsonService;
         }
 
         #region Experian Credit report Start from here
@@ -151,7 +154,7 @@ namespace CIC_Services.Controllers
 
                 //           experianResponse.Data.address= jsonObj.INProfileResponse.Current_Application.Current_Application_Details.Current_Applicant_Additional_AddressDetails.
                 //       }
-               // _logger.LogInfo("Experian PDF response generated successfully.");
+                // _logger.LogInfo("Experian PDF response generated successfully.");
                 return Ok(experianResponse);
             }
             catch (Exception ex)
@@ -188,7 +191,7 @@ namespace CIC_Services.Controllers
                             message = crifResponse.message ?? "Invalid response from CRIF service"
                         };
                     }
-                   // _logger.LogInfo("Crif Response PDF Data: " + System.Text.Json.JsonSerializer.Serialize(crifResponse));
+                    // _logger.LogInfo("Crif Response PDF Data: " + System.Text.Json.JsonSerializer.Serialize(crifResponse));
                     //await Task.Run(() => ExperianRepository.SaveCrifReport(crifResponsePdf, requiredcompanyid, _appsetting?.Value?.ConnectionStrings?.dbconnection ?? "", _logger));
                     await Task.Run(() =>
                     {
@@ -253,7 +256,7 @@ namespace CIC_Services.Controllers
                         message = crifResponse.message ?? "Invalid response from CRIF service"
                     };
                 }
-               // _logger.LogInfo("Crif Response PDF Data: " + System.Text.Json.JsonSerializer.Serialize(crifResponse));
+                // _logger.LogInfo("Crif Response PDF Data: " + System.Text.Json.JsonSerializer.Serialize(crifResponse));
                 //await Task.Run(() => ExperianRepository.SaveCrifReport(crifResponsePdf, requiredcompanyid, _appsetting?.Value?.ConnectionStrings?.dbconnection ?? "", _logger));
                 await Task.Run(() =>
                 {
@@ -463,8 +466,13 @@ namespace CIC_Services.Controllers
                 };
                 return BadRequest(badRequestResponse);
             }
+            if (!CRIF_FUSION_PROD)
+            {
+                var Response = _jsonService.ReadJsonAsync<dynamic>("UatResult", "CriffPrefilRS.json").Result;
+                return StatusCode(200, Response);
+            }
             var crifResponseReturn = await _crifService.CriffPrefil(request, CRIF_FUSION_PROD, requiredcompanyid);
-            return Ok(crifResponseReturn);
+            return StatusCode(200, crifResponseReturn);
 
         }
 

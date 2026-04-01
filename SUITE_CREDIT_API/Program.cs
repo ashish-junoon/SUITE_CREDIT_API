@@ -15,6 +15,7 @@ using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.Extensions.FileProviders;
 using Newtonsoft.Json.Serialization;
 using NLog;
+using SUITE_CREDIT_API;
 
 IConfiguration configuration = new ConfigurationBuilder()
                             .AddJsonFile("appsettings.json").AddJsonFile("IpValidation.json", optional: true, reloadOnChange: true)
@@ -69,6 +70,7 @@ builder.Services.AddScoped<ICirffServiceApp, CirffServiceApp>();
 
 builder.Services.AddSingleton<ILoggerManager, LoggerManager>();
 builder.Services.AddSingleton<FileService>();
+builder.Services.AddScoped<JsonService>();
 
 builder.Services.AddCors(options =>
 {
