@@ -196,7 +196,7 @@ namespace CIC_Services.Services
                             dob = dict["DOB-VARIATIONS"],
                         }
                     };
-                    _logger.LogInfo("Crif Response PDF Data: " + System.Text.Json.JsonSerializer.Serialize(crifResponsePdf));
+                   // _logger.LogInfo("Crif Response PDF Data: " + System.Text.Json.JsonSerializer.Serialize(crifResponsePdf));
                     //await Task.Run(() => ExperianRepository.SaveCrifReport(crifResponsePdf, company_id, _appsetting?.Value?.ConnectionStrings?.dbconnection ?? "", _logger));
 
                 }
@@ -286,6 +286,8 @@ namespace CIC_Services.Services
                     MissingMemberHandling = MissingMemberHandling.Ignore
                 };
 
+                _logger.LogInfo($"GetCreditReportAsync Class Name : {method.DeclaringType?.Name} Method Name: {method.Name}, Raw Response: {JsonConvert.SerializeObject(result)}");
+
                 try
                 {
                     if (result is not ResponseStages)
@@ -309,7 +311,7 @@ namespace CIC_Services.Services
                     }
                     else
                     {
-                        _logger.LogError($" Class Name : {method.DeclaringType?.Name} Method Name: {method.Name}, Status code return {((ResponseStages)result)?.status}, Response : {JsonConvert.SerializeObject(result)}");
+                        //_logger.LogError($" Class Name : {method.DeclaringType?.Name} Method Name: {method.Name}, Status code return {((ResponseStages)result)?.status}, Response : {JsonConvert.SerializeObject(result)}");
                         responseReturn = new CrifResponseReturn
                         {
                             Timestamp = Convert.ToString(DateTime.UtcNow),
@@ -323,7 +325,9 @@ namespace CIC_Services.Services
                                 redirectURL = ((ResponseStages)result)?.redirectURL,
                                 reportId = ((ResponseStages)result).reportId,
                                 status = ((ResponseStages)result).status,
-                                statusDesc = ((ResponseStages)result).statusDesc
+                                statusDesc = ((ResponseStages)result).statusDesc,
+                                question= ((ResponseStages)result)?.question,
+                                optionsList = ((ResponseStages)result)?.optionsList
                             }
                         };
                     }

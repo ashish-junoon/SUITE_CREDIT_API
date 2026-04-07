@@ -191,8 +191,14 @@ namespace CIC_Services.Controllers
                             message = crifResponse.message ?? "Invalid response from CRIF service"
                         };
                     }
-                    // _logger.LogInfo("Crif Response PDF Data: " + System.Text.Json.JsonSerializer.Serialize(crifResponse));
-                    //await Task.Run(() => ExperianRepository.SaveCrifReport(crifResponsePdf, requiredcompanyid, _appsetting?.Value?.ConnectionStrings?.dbconnection ?? "", _logger));
+
+                    var dict = Services.CrifService.GetLatestVariationValues(JsonConvert.SerializeObject(crifResponse));
+
+                    string dob = dict.ContainsKey("DOB-VARIATIONS") ? dict["DOB-VARIATIONS"] : "N/A";
+                    if (crifResponse?.Data?.B2CReport?.RequestData?.Applicant?.Dob != null)
+                    {
+                        crifResponse.Data.B2CReport.RequestData.Applicant.Dob.Date = dob;
+                    }
                     await Task.Run(() =>
                     {
                         ExperianRepository.PrepareAndSaveCrifResponseForDb(crifResponse, request, requiredcompanyid, "", _appsetting?.Value?.ConnectionStrings?.dbconnection ?? "", _logger);

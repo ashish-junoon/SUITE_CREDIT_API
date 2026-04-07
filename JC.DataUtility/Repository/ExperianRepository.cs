@@ -16,7 +16,7 @@ namespace CIC.DataUtility.Repository
     public class ExperianRepository
     {
 
-        public static void SaveFusionReport(CrifPrefillRQ request,dynamic fusionresponse, string companyid, string dbconnection, ILoggerManager logger)
+        public static void SaveFusionReport(CrifPrefillRQ request, dynamic fusionresponse, string companyid, string dbconnection, ILoggerManager logger)
         {
             SqlParameter[] param = new SqlParameter[7];
 
@@ -64,7 +64,7 @@ namespace CIC.DataUtility.Repository
                 }
             }
         }
-        public async static void PrepareAndSaveExperianResponseForDb(string xmlString,string company_id,string pdf_url,string connection,ILoggerManager logger)
+        public async static void PrepareAndSaveExperianResponseForDb(string xmlString, string company_id, string pdf_url, string connection, ILoggerManager logger)
         {
             try
             {
@@ -81,7 +81,7 @@ namespace CIC.DataUtility.Repository
                 var addressNode = doc.Descendants().FirstOrDefault(x => x.Name.LocalName == "Current_Applicant_Address_Details");
                 //var applicant = doc.Descendants("Current_Applicant_Details").FirstOrDefault();
                 var score = doc.Descendants().FirstOrDefault(x => x.Name.LocalName == "SCORE");
-               var creditScore = Convert.ToInt32(score?.Descendants().FirstOrDefault(x => x.Name.LocalName == "BureauScore")?.Value);
+                var creditScore = Convert.ToInt32(score?.Descendants().FirstOrDefault(x => x.Name.LocalName == "BureauScore")?.Value);
                 //string dob = applicant?.Elements().FirstOrDefault(x => x.Name.LocalName == "Date_Of_Birth_Applicant")?.Value ?? string.Empty;
                 //var addressNode = doc.Descendants().FirstOrDefault(x => x.Name.LocalName == "Current_Applicant_Address_Details");
                 string address = "";
@@ -99,14 +99,14 @@ namespace CIC.DataUtility.Repository
                                    .Select(e => e.Value)
                     ).Trim();
                 }
-                
+
                 var header = doc.Descendants("Header").FirstOrDefault();
                 string reportDate = header?.Element("ReportDate")?.Value ?? DateTime.Now.ToString("yyyyMMdd");
                 string reportTime = header?.Element("ReportTime")?.Value ?? DateTime.Now.ToString("HHmmss");
                 string exactMatch = doc.Descendants("match_result").FirstOrDefault()?.Element("Exact_match")?.Value ?? string.Empty;
-                
+
                 DateTime timestamp;
-                if (!DateTime.TryParseExact(reportDate + reportTime,"yyyyMMddHHmmss",null,System.Globalization.DateTimeStyles.None,out timestamp))
+                if (!DateTime.TryParseExact(reportDate + reportTime, "yyyyMMddHHmmss", null, System.Globalization.DateTimeStyles.None, out timestamp))
                 {
                     timestamp = DateTime.Now;
                 }
@@ -121,7 +121,7 @@ namespace CIC.DataUtility.Repository
                     CreditReportLink = pdf_url ?? string.Empty,
                     address = address ?? string.Empty.Trim(),
                     dob = applicantNode?.Element("Date_Of_Birth_Applicant")?.Value ?? string.Empty,
-                    Email = applicantNode?.Element("EMailId")?.Value ?? string.Empty ,
+                    Email = applicantNode?.Element("EMailId")?.Value ?? string.Empty,
                     match_result = exactMatch ?? string.Empty
                 };
                 var experianResponsePdf = new ExperianResponsePdf
@@ -162,7 +162,7 @@ namespace CIC.DataUtility.Repository
             param[0] = new SqlParameter("company_id", SqlDbType.VarChar, 10) { Value = companyid };
             param[1] = new SqlParameter("pan_number", SqlDbType.VarChar, 15) { Value = response?.Data?.Pan };
             param[2] = new SqlParameter("credit_score", SqlDbType.VarChar, 5) { Value = response?.Data?.CreditScore };
-            param[3] = new SqlParameter("message", SqlDbType.VarChar, 200) { Value = response?.message};
+            param[3] = new SqlParameter("message", SqlDbType.VarChar, 200) { Value = response?.message };
             param[4] = new SqlParameter("provider", SqlDbType.VarChar, 30) { Value = "EXPERIAN" };
             param[5] = new SqlParameter("status", SqlDbType.VarChar, 30) { Value = response?.Status };
             param[6] = new SqlParameter("customer_name", SqlDbType.VarChar, 50) { Value = response?.Data?.Name };
@@ -182,7 +182,7 @@ namespace CIC.DataUtility.Repository
             }
             catch (Exception ex)
             {
-                //_logger.LogError(ex, "Error in SaveExperianReport");
+                logger.LogError($"SaveExperianReport Error while saving data in DB {ex.Message}");
                 throw;
             }
         }
@@ -244,17 +244,20 @@ namespace CIC.DataUtility.Repository
                 logger
             );
         }
-        public static void PrepareAndSaveCrifResponseForDb(CrifResponseReturn crifResponse,SoftPullRQ request,string company_id,string pdf_url,string connection,ILoggerManager logger)
+        public static void PrepareAndSaveCrifResponseForDb(CrifResponseReturn crifResponse, SoftPullRQ request, string company_id, string pdf_url, string connection, ILoggerManager logger)
         {
+            logger.LogInfo($"Preparing to save CRIF response to DB...{Newtonsoft.Json.JsonConvert.SerializeObject(crifResponse)}");
+
             CrifResponsePdf crifResponsePdf = new CrifResponsePdf();
-            if (crifResponse?.Data?.B2CReport?.Header == null)
+            if (crifResponse?.Data?.status == "S11")
             {
                 crifResponsePdf = new CrifResponsePdf
                 {
-                    Timestamp =Convert.ToString(DateTime.Now),
-                    TransactionId = string.Empty,
-                    StatusCode = 500,
-                    Status = false,
+                    Timestamp = Convert.ToString(DateTime.Now),
+                    TransactionId = crifResponse.TransactionId,
+                    StatusCode = 200,
+                    Status = true,
+                    message = "Authentication phase" ?? string.Empty,
                     Data = new CIC.Model.Criff.Response.CreditScoreData
                     {
                         uid_number = request?.uid_number ?? string.Empty,
@@ -264,7 +267,30 @@ namespace CIC.DataUtility.Repository
                         CreditReportLink = pdf_url ?? string.Empty,
                         address = string.Empty,
                         dob = null,
-                        email = string.Empty 
+                        email = string.Empty,
+                    }
+                };
+            }
+
+            else if (crifResponse?.Data?.B2CReport?.Header == null)
+            {
+                crifResponsePdf = new CrifResponsePdf
+                {
+                    Timestamp = Convert.ToString(DateTime.Now),
+                    TransactionId = string.Empty,
+                    StatusCode = 500,
+                    Status = false,
+                    message = "Error in fetching report" ?? string.Empty,
+                    Data = new CIC.Model.Criff.Response.CreditScoreData
+                    {
+                        uid_number = request?.uid_number ?? string.Empty,
+                        Name = $"{request?.first_name ?? string.Empty} {request?.last_name ?? string.Empty}".Trim(),
+                        Mobile = request?.mobile_number ?? string.Empty,
+                        CreditScore = 0,
+                        CreditReportLink = pdf_url ?? string.Empty,
+                        address = string.Empty,
+                        dob = null,
+                        email = string.Empty
                     }
                 };
             }
@@ -281,6 +307,7 @@ namespace CIC.DataUtility.Repository
                     TransactionId = crifResponse.Data.B2CReport.Header.ReportId ?? string.Empty,
                     StatusCode = 200,
                     Status = true,
+                    message= "Normal Response" ?? string.Empty,
                     Data = new CIC.Model.Criff.Response.CreditScoreData
                     {
                         uid_number = request?.uid_number ?? string.Empty,
@@ -318,8 +345,8 @@ namespace CIC.DataUtility.Repository
                 var _email = currentApplicant?.Emails?.FirstOrDefault()?.Email;
                 var mobile = currentApplicant?.Phones?.FirstOrDefault()?.Value ?? string.Empty;
                 string pan = currentApplicant?.Ids?.FirstOrDefault(x => x.Type == "PAN")?.Value ?? string.Empty;
-                string name = string.Join(" ", currentApplicant?.FirstName ?? string.Empty, currentApplicant?.MiddleName ?? string.Empty,currentApplicant?.LastName ?? string.Empty).Trim();
-                
+                string name = string.Join(" ", currentApplicant?.FirstName ?? string.Empty, currentApplicant?.MiddleName ?? string.Empty, currentApplicant?.LastName ?? string.Empty).Trim();
+
                 var crifResponsePdf = new CrifResponsePdf
                 {
                     Timestamp = crifResponse?.Data?.B2CReport?.Header?.DateOfRequest,
@@ -358,14 +385,14 @@ namespace CIC.DataUtility.Repository
             param[0] = new SqlParameter("company_id", SqlDbType.VarChar, 10);
             param[0].Value = companyid;
 
-            param[1] = new SqlParameter("uid_number", SqlDbType.VarChar, 25);
+            param[1] = new SqlParameter("pan_number", SqlDbType.VarChar, 25);
             param[1].Value = response?.Data?.uid_number;
 
             param[2] = new SqlParameter("credit_score", SqlDbType.VarChar, 5);
             param[2].Value = response?.Data?.CreditScore;
 
             param[3] = new SqlParameter("message", SqlDbType.VarChar, 200);
-            param[3].Value = response.Status ? "Normal Response" : "Error In Report";
+            param[3].Value = response?.message;
 
             param[4] = new SqlParameter("provider", SqlDbType.VarChar, 30);
             param[4].Value = "CRIF";
@@ -400,49 +427,49 @@ namespace CIC.DataUtility.Repository
                 }
                 catch (Exception ex)
                 {
-                    logger.LogError($"Error in SaveExperianReport: {ex.Message}");
+                    logger.LogError($"Error in SaveCrifReport: {ex.Message}");
                 }
             }
         }
 
-        public static async Task SaveCibilReport(string status,string score,string name,string pan,string transaction_id,string company_id,string vendor_code,string email, string phones ,string connection,ILoggerManager logger)
+        public static async Task SaveCibilReport(string status, string score, string name, string pan, string transaction_id, string company_id, string vendor_code, string email, string phones, string connection, ILoggerManager logger)
         {
-                SqlParameter[] param = new SqlParameter[12];
-                param[0] = new SqlParameter("company_id", SqlDbType.VarChar, 10) { Value = company_id ?? string.Empty };
-                param[1] = new SqlParameter("pan_number", SqlDbType.VarChar, 15) { Value = pan ?? string.Empty };
-                param[2] = new SqlParameter("credit_score", SqlDbType.VarChar, 5) { Value = score ?? string.Empty };
-                param[3] = new SqlParameter("message", SqlDbType.VarChar, 200) { Value = status ?? string.Empty };
-                param[4] = new SqlParameter("provider", SqlDbType.VarChar, 30) { Value = "CIBIL" };
-                param[5] = new SqlParameter("status", SqlDbType.VarChar, 30) { Value = status ?? string.Empty };
-                param[6] = new SqlParameter("customer_name", SqlDbType.VarChar, 50) { Value = name ?? string.Empty };
-                param[7] = new SqlParameter("mobile_number", SqlDbType.VarChar, 15) { Value = phones ?? string.Empty };
-                param[8] = new SqlParameter("transaction_id", SqlDbType.VarChar, 50) { Value = transaction_id ?? string.Empty };
-                //param[9] = new SqlParameter("_Address", SqlDbType.VarChar, 100) { Value = _Address ?? string.Empty };
-                //param[10] = new SqlParameter("dob", SqlDbType.VarChar, 20) { Value = dob ?? string.Empty };
-                param[11] = new SqlParameter("email", SqlDbType.VarChar, 100) { Value = email ?? string.Empty };
+            SqlParameter[] param = new SqlParameter[12];
+            param[0] = new SqlParameter("company_id", SqlDbType.VarChar, 10) { Value = company_id ?? string.Empty };
+            param[1] = new SqlParameter("pan_number", SqlDbType.VarChar, 15) { Value = pan ?? string.Empty };
+            param[2] = new SqlParameter("credit_score", SqlDbType.VarChar, 5) { Value = score ?? string.Empty };
+            param[3] = new SqlParameter("message", SqlDbType.VarChar, 200) { Value = status ?? string.Empty };
+            param[4] = new SqlParameter("provider", SqlDbType.VarChar, 30) { Value = "CIBIL" };
+            param[5] = new SqlParameter("status", SqlDbType.VarChar, 30) { Value = status ?? string.Empty };
+            param[6] = new SqlParameter("customer_name", SqlDbType.VarChar, 50) { Value = name ?? string.Empty };
+            param[7] = new SqlParameter("mobile_number", SqlDbType.VarChar, 15) { Value = phones ?? string.Empty };
+            param[8] = new SqlParameter("transaction_id", SqlDbType.VarChar, 50) { Value = transaction_id ?? string.Empty };
+            //param[9] = new SqlParameter("_Address", SqlDbType.VarChar, 100) { Value = _Address ?? string.Empty };
+            //param[10] = new SqlParameter("dob", SqlDbType.VarChar, 20) { Value = dob ?? string.Empty };
+            param[11] = new SqlParameter("email", SqlDbType.VarChar, 100) { Value = email ?? string.Empty };
 
-                try
+            try
+            {
+                logger.LogInfo("SaveCibilReport - Preparing to push data into database...");
+
+                using (SqlConnection con = GetDBConnection.getConnection(connection))
                 {
-                    logger.LogInfo("SaveCibilReport - Preparing to push data into database...");
-
-                    using (SqlConnection con = GetDBConnection.getConnection(connection))
+                    await con.OpenAsync();
+                    await Task.Run(() =>
                     {
-                        await con.OpenAsync();
-                        await Task.Run(() =>
-                        {
-                            SqlHelper.ExecuteDataset(con, CommandType.StoredProcedure, "USP_Cibil_Report", param);
-                        });
-                    }
+                        SqlHelper.ExecuteDataset(con, CommandType.StoredProcedure, "USP_Cibil_Report", param);
+                    });
+                }
 
-                    logger.LogInfo("SaveCibilReport - Data saved successfully in database.");
-                }
-                catch (Exception ex)
-                {
-                    //logger.LogError(ex, "SaveCibilReport - Error occurred while saving data.");
-                    //throw;
-                }
+                logger.LogInfo("SaveCibilReport - Data saved successfully in database.");
             }
+            catch (Exception ex)
+            {
+                //logger.LogError(ex, "SaveCibilReport - Error occurred while saving data.");
+                //throw;
+            }
+        }
 
-   
+
     }
 }

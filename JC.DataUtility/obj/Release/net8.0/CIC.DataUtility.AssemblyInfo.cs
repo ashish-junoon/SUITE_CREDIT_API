@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("CIC.DataUtility")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Release")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+64e4ac81c95bda8e1edfb00e02a1ce2865eb11a5")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+e444e66e0e1a92aa3e8601be1aa44178f8000710")]
 [assembly: System.Reflection.AssemblyProductAttribute("CIC.DataUtility")]
 [assembly: System.Reflection.AssemblyTitleAttribute("CIC.DataUtility")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

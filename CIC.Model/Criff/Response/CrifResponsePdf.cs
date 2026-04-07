@@ -19,7 +19,7 @@ namespace CIC.Model.Criff.Response
         [JsonProperty("DATA")]
         public CreditScoreData? Data { get; set; }
         [JsonProperty("MESSAGE")]
-        public string? message { get; set; }
+        public string message { get; set; }
     }
     public class CreditScoreData
     {

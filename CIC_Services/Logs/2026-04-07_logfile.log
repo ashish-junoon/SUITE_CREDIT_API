@@ -1,0 +1,4 @@
+2026-04-07 15:06:30.3497 INFO Controller: CreditScore, Action: GetCreditReportCriff 
+2026-04-07 15:09:09.3601 INFO Controller: CreditScore, Action: GetCreditReportCriff 
+2026-04-07 15:09:11.2991 ERROR Class Name : CrifService Method Name: GetCreditReportAsync, Error Details: Unexpected character encountered while parsing value: &. Path '', line 0, position 0. 
+2026-04-07 15:58:57.9460 INFO Controller: CreditScore, Action: AuthQuestionnaireCriff 

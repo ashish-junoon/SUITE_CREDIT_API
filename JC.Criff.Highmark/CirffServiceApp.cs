@@ -290,7 +290,7 @@ namespace JC.Criff.Highmark
             //Console.WriteLine((string)jObject["albums"][0]["cover_image_url"]);
 
             stageOne = Newtonsoft.Json.JsonConvert.DeserializeObject<ResponseStages>(result);
-            //_logger.LogInfo($"Response Stage 1 : {result}");
+          //  _logger.LogInfo($"Response Stage 1 : {result}");
             #endregion
             if (stageOne?.status != "S06")
             {
@@ -307,15 +307,16 @@ namespace JC.Criff.Highmark
             keyValuePairs.Add("merchantID", CRIF_MBRID);
             //-------Stage 2 --------------
             string followUpBody = $"{orderId}|{stageOne.reportId}|{accessCode}|{stageOne.redirectURL}|N|N|Y";
-            _logger.LogInfo($"Request Stage 2 : {followUpBody}");
+            //_logger.LogInfo($"Request Stage 2 : {followUpBody}");
             stageOne = new ResponseStages();
             var result1 = await HttpClientPost.PostAsync($"{CRIF_ENDPOINT_URL}response", followUpBody, keyValuePairs, "application/xml");
-            _logger.LogInfo($"Response Stage 2 : {result1}");
+           // _logger.LogInfo($"Response Stage 2 : {result1}");
             stageOne = Newtonsoft.Json.JsonConvert.DeserializeObject<ResponseStages>(result1);
 
             if (stageOne.status == "S11" || stageOne.status == "S02") //|| stageOne.status != "S10"
             {
                 stageOne.statusDesc = ErrorCodeMapper.GetDescription(stageOne?.status);
+               //_logger.LogInfo($"Response Stage 2 S11 : {Newtonsoft.Json.JsonConvert.SerializeObject(stageOne)}");
                 return stageOne;
             }
             else if (stageOne.status == "S08" || stageOne.status == "S07") //|| stageOne.status != "S10"
@@ -324,7 +325,7 @@ namespace JC.Criff.Highmark
                 return stageOne;
             }
 
-            else if (stageOne.status != "S09" && stageOne.status != "S10") //|| stageOne.status != "S10"
+            else if (stageOne.status != "S09" && stageOne.status != "S10" && stageOne.status != "S01") //|| stageOne.status != "S10"
             {
                 stageOne.statusDesc = ErrorCodeMapper.GetDescription(stageOne?.status);
                 return stageOne;
@@ -336,7 +337,7 @@ namespace JC.Criff.Highmark
             keyValuePairs.Add("accessCode", accessCode);
             keyValuePairs.Add("appID", CRIF_APPID);
             keyValuePairs.Add("merchantID", CRIF_MBRID);
-            _logger.LogInfo($"Request Stage 3 : {followUpBody}");
+           // _logger.LogInfo($"Request Stage 3 : {followUpBody}");
             var result2 = await HttpClientPost.PostAsync($"{CRIF_ENDPOINT_URL}response", followUpBody, keyValuePairs, "application/xml");
            // _logger.LogInfo($"Response Stage 3 : {result2}");
             return result2;

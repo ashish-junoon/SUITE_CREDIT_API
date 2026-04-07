@@ -43,7 +43,6 @@ namespace CIC.Model.Criff.Response
         public string? statusDesc { get; set; }
         public string? question { get; set; }
         public List<string>? optionsList { get; set; }
-
     }
 
     public class B2CReport
